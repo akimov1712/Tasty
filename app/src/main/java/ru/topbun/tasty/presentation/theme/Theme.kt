@@ -1,6 +1,5 @@
-package ru.topbun.tasty.ui.theme
+package ru.topbun.tasty.presentation.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

@@ -1,4 +1,4 @@
-package ru.topbun.tasty.ui.theme
+package ru.topbun.tasty.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

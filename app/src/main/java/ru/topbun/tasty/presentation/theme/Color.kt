@@ -1,4 +1,4 @@
-package ru.topbun.tasty.ui.theme
+package ru.topbun.tasty.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
