@@ -7,7 +7,8 @@ import ru.topbun.tasty.data.source.remote.category.CategoryApi
 import ru.topbun.tasty.data.source.remote.recipe.RecipeApi
 
 val retrofitModule = module {
-    single<RecipeApi>{ ApiFactory.recipeApi }
-    single<CategoryApi>{ ApiFactory.categoryApi }
-    single<AuthApi>{ ApiFactory.authApi }
+    single<ApiFactory>{ ApiFactory(get()) }
+    single<RecipeApi>{ get<ApiFactory>().recipeApi }
+    single<CategoryApi>{ get<ApiFactory>().categoryApi }
+    single<AuthApi>{ get<ApiFactory>().authApi }
 }
