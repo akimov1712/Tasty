@@ -10,7 +10,6 @@ import ru.topbun.tasty.utills.exceptionWrapper
 
 class CategoryRepositoryImpl(
     private val api: CategoryApi,
-    private val settings: Settings
 ): CategoryRepository {
 
     override suspend fun getCategories(): List<CategoryEntity> = exceptionWrapper{

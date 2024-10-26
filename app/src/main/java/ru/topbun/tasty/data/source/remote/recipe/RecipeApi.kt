@@ -15,7 +15,7 @@ import ru.topbun.tasty.domain.entity.recipe.RecipeEntity
 interface RecipeApi {
 
     @POST("/recipe")
-    suspend fun addRecipe(@Body recipeDTO: RecipeDTO): Response<RecipeDTO>
+    suspend fun addRecipe(@Body recipeDTO: RecipeDTO, token: String): Response<RecipeDTO>
 
     @GET("/recipe")
     suspend fun getRecipes(@Body offset: Int, @Body limit: Int): Response<List<RecipeDTO>>
