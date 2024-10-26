@@ -1,4 +1,4 @@
-package ru.topbun.tasty
+package ru.topbun.tasty.utills
 
 object Const {
 

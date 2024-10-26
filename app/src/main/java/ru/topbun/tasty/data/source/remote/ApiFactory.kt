@@ -6,7 +6,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import ru.topbun.tasty.Const.BASE_URL
+import ru.topbun.tasty.utills.Const.BASE_URL
 
 object ApiFactory {
 
