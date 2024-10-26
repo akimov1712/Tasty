@@ -6,6 +6,6 @@ class GetRecipeWithCategoryUseCase(
     private val repository: RecipeRepository
 ) {
 
-    suspend operator fun invoke(categoryId: Int) = repository.getRecipesWithCategory(categoryId)
+    suspend operator fun invoke(categoryId: Int, offset: Int = 0, limit: Int = 20) = repository.getRecipesWithCategory(categoryId, offset, limit)
 
 }

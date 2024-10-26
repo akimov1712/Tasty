@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.devtools.ksp") version "2.0.21-1.0.25"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
+    kotlin("plugin.serialization") version "2.0.21"
 }
 
 android {
@@ -68,6 +68,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // JsonSerialization
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     // DataStore
     implementation (libs.androidx.datastore.datastore.preferences2)
