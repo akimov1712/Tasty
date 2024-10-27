@@ -54,6 +54,11 @@ android {
 
 dependencies {
 
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":core"))
+    implementation(project(":di"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -69,17 +74,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    // JsonSerialization
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-
-    // DataStore
-    implementation (libs.androidx.datastore.datastore.preferences2)
-
-    // Retrofit
-    implementation (libs.retrofit)
-    implementation (libs.logging.interceptor)
 
     // Glide
     implementation (libs.compose)
