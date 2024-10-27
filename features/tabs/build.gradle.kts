@@ -1,26 +1,17 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.serialization)
 }
 
 android {
-    namespace = "ru.topbun.tasty"
+    namespace = "ru.topbun.tabs"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.topbun.tasty"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -39,30 +30,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
-
-
-    implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":core"))
-    implementation(project(":features"))
-    implementation(project(":features:tabs"))
-    implementation(project(":core:common"))
-    implementation(project(":core:android"))
-    implementation(project(":core:ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -80,17 +50,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Glide
+    implementation (libs.compose)
+
     // Koin
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.ktor)
 
-
     // Voyager
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.screenmodel)
-    implementation(libs.voyager.bottom.sheet.navigator)
     implementation(libs.voyager.tab.navigator)
     implementation(libs.voyager.transitions)
     implementation(libs.voyager.koin)

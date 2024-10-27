@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.topbun.data"
+    namespace = "ru.topbun.ui"
     compileSdk = 34
 
     defaultConfig {
@@ -41,24 +41,11 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(project(":core:common"))
-    implementation(project(":core:android"))
-    implementation(project(":domain"))
-    
-    // JsonSerialization
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-
-    // DataStore
-    implementation (libs.androidx.datastore.datastore.preferences2)
-
-    // Retrofit
-    implementation (libs.retrofit)
-    implementation (libs.logging.interceptor)
-
-    // Ktor
-    implementation(libs.koin.android)
-    implementation(libs.koin.ktor)
-
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
 
 }

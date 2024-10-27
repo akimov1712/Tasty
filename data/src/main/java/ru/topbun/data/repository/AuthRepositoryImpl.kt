@@ -1,7 +1,7 @@
 package ru.topbun.data.repository
 
-import ru.topbun.core.utills.codeResultWrapper
-import ru.topbun.core.utills.exceptionWrapper
+import ru.topbun.android.codeResultWrapper
+import ru.topbun.android.exceptionWrapper
 import ru.topbun.tasty.mapper.toDTO
 import ru.topbun.data.source.local.dataStore.Settings
 import ru.topbun.domain.entity.auth.LoginEntity
@@ -15,12 +15,12 @@ class AuthRepositoryImpl(
     private val settings: Settings,
 ): AuthRepository {
 
-    override suspend fun login(login: LoginEntity): Unit = exceptionWrapper{
+    override suspend fun login(login: LoginEntity): Unit = ru.topbun.android.exceptionWrapper {
         val token = api.login(login.toDTO()).codeResultWrapper()
         settings.saveToken(token.token)
     }
 
-    override suspend fun signUp(signup: SignUpEntity): Unit = exceptionWrapper{
+    override suspend fun signUp(signup: SignUpEntity): Unit = ru.topbun.android.exceptionWrapper {
         val token = api.signUp(signup.toDTO()).codeResultWrapper()
         settings.saveToken(token.token)
     }

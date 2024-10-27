@@ -10,7 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
-import ru.topbun.core.utills.Const.BASE_URL
+import ru.topbun.common.Const.BASE_URL
 import ru.topbun.data.source.local.dataStore.Settings
 import ru.topbun.data.source.local.dataStore.getToken
 import ru.topbun.tasty.data.source.remote.auth.AuthApi
