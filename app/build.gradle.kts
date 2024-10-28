@@ -54,16 +54,6 @@ android {
 
 dependencies {
 
-
-    implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":core"))
-    implementation(project(":features"))
-    implementation(project(":features:tabs"))
-    implementation(project(":core:common"))
-    implementation(project(":core:android"))
-    implementation(project(":core:ui"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -86,7 +76,6 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.ktor)
 
-
     // Voyager
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.screenmodel)
@@ -94,5 +83,19 @@ dependencies {
     implementation(libs.voyager.tab.navigator)
     implementation(libs.voyager.transitions)
     implementation(libs.voyager.koin)
+
+
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":core:common"))
+    implementation(project(":core:android"))
+    implementation(project(":core:ui"))
+    implementation(project(":navigation"))
+    implementation(project(":features:tabs"))
+    implementation(project(":features:tabs:recipes"))
+    implementation(project(":features:tabs:add_recipe"))
+    implementation(project(":features:tabs:category"))
+    implementation(project(":features:tabs:profile"))
+    implementation(project(":features:tabs:favorite"))
 
 }
