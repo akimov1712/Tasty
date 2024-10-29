@@ -4,24 +4,24 @@ import cafe.adriel.voyager.core.registry.screenModule
 import ru.topbun.add_recipe.AddRecipeScreen
 import ru.topbun.category.CategoryScreen
 import ru.topbun.favorite.FavoriteScreen
-import ru.topbun.navigation.TabScreens
+import ru.topbun.navigation.TabScreenProvider
 import ru.topbun.profile.ProfileScreen
 import ru.topbun.recipes.RecipesScreen
 
 val tabsScreenModule = screenModule {
-    register<TabScreens.Recipe> {
+    register<TabScreenProvider.Recipe> {
         RecipesScreen
     }
-    register<TabScreens.Category> {
+    register<TabScreenProvider.Category> {
         CategoryScreen
     }
-    register<TabScreens.AddRecipe> {
+    register<TabScreenProvider.AddRecipe> {
         AddRecipeScreen
     }
-    register<TabScreens.Favorite> {
+    register<TabScreenProvider.Favorite> {
         FavoriteScreen
     }
-    register<TabScreens.Profile> {
+    register<TabScreenProvider.Profile> {
         ProfileScreen
     }
 }
