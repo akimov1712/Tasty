@@ -15,12 +15,12 @@ class AuthRepositoryImpl(
     private val settings: Settings,
 ): AuthRepository {
 
-    override suspend fun login(login: LoginEntity): Unit = ru.topbun.android.exceptionWrapper {
+    override suspend fun login(login: LoginEntity): Unit = exceptionWrapper {
         val token = api.login(login.toDTO()).codeResultWrapper()
         settings.saveToken(token.token)
     }
 
-    override suspend fun signUp(signup: SignUpEntity): Unit = ru.topbun.android.exceptionWrapper {
+    override suspend fun signUp(signup: SignUpEntity): Unit = exceptionWrapper {
         val token = api.signUp(signup.toDTO()).codeResultWrapper()
         settings.saveToken(token.token)
     }

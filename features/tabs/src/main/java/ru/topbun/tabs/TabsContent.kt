@@ -56,6 +56,7 @@ object TabsScreen: Screen{
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
+                            .background(Colors.WHITE)
                             .padding(it)
                     ) {
                         navigator.lastItem.Content()
