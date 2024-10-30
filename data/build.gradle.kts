@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -47,18 +48,18 @@ dependencies {
     
     // JsonSerialization
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     // DataStore
     implementation (libs.androidx.datastore.datastore.preferences2)
 
-    // Retrofit
-    implementation (libs.retrofit)
-    implementation (libs.logging.interceptor)
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.negotiation)
+    implementation(libs.ktor.kotlinx.serialization.json)
+    implementation(libs.ktor.logging.android)
 
     // Ktor
     implementation(libs.koin.android)
-    implementation(libs.koin.ktor)
-
 
 }

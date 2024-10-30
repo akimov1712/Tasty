@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.serialization)
 }
+
 
 android {
     namespace = "ru.topbun.android"
@@ -42,6 +44,13 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-    implementation (libs.retrofit)
+
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.negotiation)
+    implementation(libs.ktor.kotlinx.serialization.json)
+
+    implementation(libs.voyager.screenmodel)
+    implementation(libs.voyager.navigator)
 }

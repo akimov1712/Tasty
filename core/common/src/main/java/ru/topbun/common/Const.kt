@@ -2,6 +2,6 @@ package ru.topbun.common
 
 object Const {
 
-    const val BASE_URL = "http://127.0.0.1:8080"
+    const val BASE_URL = "http://192.168.31.134:8080"
 
 }

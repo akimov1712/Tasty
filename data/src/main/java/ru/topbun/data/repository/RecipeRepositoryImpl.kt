@@ -1,49 +1,48 @@
-package ru.topbun.tasty.data.repository
+package ru.topbun.data.repository
 
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import ru.topbun.android.codeResultWrapper
-import ru.topbun.android.exceptionWrapper
+import io.ktor.client.call.body
+import ru.topbun.data.codeResultWrapper
+import ru.topbun.data.exceptionWrapper
 import ru.topbun.data.mapper.toDTO
 import ru.topbun.data.mapper.toEntity
+import ru.topbun.data.source.local.dataStore.Settings
+import ru.topbun.data.source.local.dataStore.getToken
 import ru.topbun.domain.entity.recipe.RecipeEntity
 import ru.topbun.domain.repository.recipe.RecipeRepository
-import ru.topbun.tasty.data.source.remote.recipe.RecipeApi
+import ru.topbun.data.source.network.recipe.RecipeApi
+import ru.topbun.data.source.network.recipe.dto.GetRecipeReceive
+import ru.topbun.data.source.network.recipe.dto.GetRecipeWithoutQueryReceive
+import ru.topbun.data.source.network.recipe.dto.RecipeDTO
 
 class RecipeRepositoryImpl(
     private val api: RecipeApi,
+    private val settings: Settings,
 ): RecipeRepository {
 
-    override suspend fun addRecipe(recipe: RecipeEntity): RecipeEntity =
-        ru.topbun.android.exceptionWrapper {
-            api.addRecipe(recipe.toDTO()).codeResultWrapper().toEntity()
+    override suspend fun addRecipe(recipe: RecipeEntity): RecipeEntity = exceptionWrapper {
+            api.addRecipe(
+                recipe = recipe.toDTO(),
+                token = settings.getToken()
+            ).codeResultWrapper().body<RecipeDTO>().toEntity()
         }
 
-    override suspend fun getRecipes(offset: Int, limit: Int): List<RecipeEntity> =
-        ru.topbun.android.exceptionWrapper {
-            api.getRecipes(offset, limit).codeResultWrapper().toEntity()
+    override suspend fun getRecipes(q: String, offset: Int, limit: Int, isMyRecipe: Boolean): List<RecipeEntity> = exceptionWrapper {
+            val data = GetRecipeReceive(q, offset, limit)
+            val result = if (isMyRecipe) api.getMyRecipes(data, settings.getToken())
+                        else api.getRecipes(data)
+            result.codeResultWrapper().body<List<RecipeDTO>>().toEntity()
         }
 
-    override suspend fun getMyRecipes(offset: Int, limit: Int): List<RecipeEntity> =
-        ru.topbun.android.exceptionWrapper {
-            api.getMyRecipes(offset, limit).codeResultWrapper().toEntity()
+    override suspend fun getRecipesWithId(id: Int): RecipeEntity = exceptionWrapper {
+            api.getRecipesWithId(id).codeResultWrapper().body<RecipeDTO>().toEntity()
         }
 
-    override suspend fun getRecipesWithId(id: Int): RecipeEntity =
-        ru.topbun.android.exceptionWrapper {
-            api.getRecipesWithId(id).codeResultWrapper().toEntity()
+    override suspend fun getRecipesWithCategory(categoryId: Int, offset: Int, limit: Int): List<RecipeEntity> = exceptionWrapper {
+            val data = GetRecipeWithoutQueryReceive(offset, limit)
+            api.getRecipesWithCategory(categoryId, data).codeResultWrapper().body<List<RecipeDTO>>().toEntity()
         }
 
-    override suspend fun getRecipesWithCategory(categoryId: Int, offset: Int, limit: Int): List<RecipeEntity> =
-        ru.topbun.android.exceptionWrapper {
-            api.getRecipesWithCategory(categoryId, offset, limit).codeResultWrapper().toEntity()
-        }
-
-    override suspend fun uploadImage(image: ByteArray): String =
-        ru.topbun.android.exceptionWrapper {
-            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), image)
-            val imageFormData = MultipartBody.Part.createFormData("image", null, requestFile)
-            api.uploadImage(imageFormData).codeResultWrapper().url
+    override suspend fun uploadImage(image: ByteArray): String = exceptionWrapper {
+            api.uploadImage(image).body()
         }
 }

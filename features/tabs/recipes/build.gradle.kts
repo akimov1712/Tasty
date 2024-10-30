@@ -40,6 +40,7 @@ dependencies {
 
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
+    implementation(project(":core:android"))
     implementation(project(":domain"))
 
     implementation(libs.androidx.core.ktx)
@@ -58,6 +59,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    
+    // Ktor
+    implementation(libs.koin.android)
 
     // Coil
     implementation(libs.coil)

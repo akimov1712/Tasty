@@ -4,7 +4,7 @@ import ru.topbun.domain.entity.recipe.IngredientsEntity
 import ru.topbun.domain.entity.recipe.RecipeEntity
 import ru.topbun.domain.entity.recipe.StepEntity
 import ru.topbun.tasty.data.source.remote.recipe.dto.IngredientsDTO
-import ru.topbun.tasty.data.source.remote.recipe.dto.RecipeDTO
+import ru.topbun.data.source.network.recipe.dto.RecipeDTO
 import ru.topbun.tasty.data.source.remote.recipe.dto.StepDTO
 
 fun RecipeEntity.toDTO() = RecipeDTO(
@@ -13,6 +13,7 @@ fun RecipeEntity.toDTO() = RecipeDTO(
     title = title,
     description = description,
     image = image,
+    isFavorite = isFavorite,
     categoryId = categoryId,
     timeCooking = timeCooking,
     difficulty = difficulty,
@@ -42,6 +43,7 @@ fun RecipeDTO.toEntity() = RecipeEntity(
     userId = userId,
     title = title,
     description = description,
+    isFavorite = isFavorite,
     image = image,
     categoryId = categoryId,
     timeCooking = timeCooking,

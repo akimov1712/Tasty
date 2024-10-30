@@ -17,13 +17,13 @@ fun Int?.convertCookingTime(): String {
 
     val builder = StringBuilder()
     if (days > 0) {
-        builder.append("${days}д ")
+        builder.append("${days} д ")
     }
     if (hours > 0) {
-        builder.append("${hours}ч ")
+        builder.append("${hours} ч ")
     }
     if (remainingMinutes > 0) {
-        builder.append("${remainingMinutes}мин")
+        builder.append("${remainingMinutes} мин")
     }
     val result = builder.toString().trim()
 

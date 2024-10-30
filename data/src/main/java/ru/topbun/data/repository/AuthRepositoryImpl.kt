@@ -1,14 +1,16 @@
 package ru.topbun.data.repository
 
-import ru.topbun.android.codeResultWrapper
-import ru.topbun.android.exceptionWrapper
-import ru.topbun.tasty.mapper.toDTO
+import io.ktor.client.call.body
+import ru.topbun.data.codeResultWrapper
+import ru.topbun.data.exceptionWrapper
 import ru.topbun.data.source.local.dataStore.Settings
+import ru.topbun.data.source.local.dataStore.saveToken
+import ru.topbun.data.source.network.auth.AuthApi
 import ru.topbun.domain.entity.auth.LoginEntity
 import ru.topbun.domain.entity.auth.SignUpEntity
 import ru.topbun.domain.repository.auth.AuthRepository
-import ru.topbun.data.source.local.dataStore.saveToken
-import ru.topbun.tasty.data.source.remote.auth.AuthApi
+import ru.topbun.tasty.data.source.remote.auth.dto.TokenResponse
+import ru.topbun.tasty.mapper.toDTO
 
 class AuthRepositoryImpl(
     private val api: AuthApi,
@@ -16,12 +18,12 @@ class AuthRepositoryImpl(
 ): AuthRepository {
 
     override suspend fun login(login: LoginEntity): Unit = exceptionWrapper {
-        val token = api.login(login.toDTO()).codeResultWrapper()
+        val token = api.login(login.toDTO()).codeResultWrapper().body<TokenResponse>()
         settings.saveToken(token.token)
     }
 
     override suspend fun signUp(signup: SignUpEntity): Unit = exceptionWrapper {
-        val token = api.signUp(signup.toDTO()).codeResultWrapper()
+        val token = api.signUp(signup.toDTO()).codeResultWrapper().body<TokenResponse>()
         settings.saveToken(token.token)
     }
 }

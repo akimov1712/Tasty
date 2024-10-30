@@ -39,6 +39,7 @@ android {
 dependencies {
 
     implementation(project(":core:ui"))
+    implementation(project(":core:android"))
     implementation(project(":domain"))
 
     implementation(libs.androidx.core.ktx)
@@ -57,6 +58,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
 
     // Voyager
     implementation(libs.voyager.navigator)

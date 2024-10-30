@@ -9,7 +9,7 @@ suspend fun Settings.getToken(): String {
     val token = this.data
         .map { it[AppSettings.KEY_TOKEN] }
         .firstOrNull()
-    return token ?: throw ru.topbun.android.FailedExtractTokenException()
+    return token ?: throw FailedExtractTokenException()
 }
 
 suspend fun Settings.saveToken(token: String){

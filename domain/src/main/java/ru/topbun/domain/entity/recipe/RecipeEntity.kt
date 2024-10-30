@@ -6,6 +6,7 @@ data class RecipeEntity(
     val title: String,
     val description: String?,
     val image: String?,
+    val isFavorite: Boolean,
     val categoryId: List<Int>,
     val timeCooking: Int?,
     val difficulty: DifficultyType,

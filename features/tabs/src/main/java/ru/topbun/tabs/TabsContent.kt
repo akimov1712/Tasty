@@ -32,13 +32,18 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.Tab
+import cafe.adriel.voyager.transitions.FadeTransition
+import cafe.adriel.voyager.transitions.ScaleTransition
+import cafe.adriel.voyager.transitions.SlideTransition
 import ru.topbun.add_recipe.AddRecipeScreen
+import ru.topbun.android.pushFront
 import ru.topbun.category.CategoryScreen
 import ru.topbun.favorite.FavoriteScreen
 import ru.topbun.profile.ProfileScreen
@@ -50,7 +55,7 @@ object TabsScreen: Screen{
 
     @Composable
     override fun Content() {
-        Navigator(RecipesScreen) { navigator ->
+        Navigator(RecipesScreen){ navigator ->
             Scaffold(
                 content = {
                     Box(
@@ -123,7 +128,7 @@ object TabsScreen: Screen{
                     if (selected) {
                         navigator.pop()
                     } else {
-                        navigator.push(AddRecipeScreen)
+                        navigator.pushFront(AddRecipeScreen)
                     }
                 }
             ) {
@@ -148,7 +153,7 @@ private fun RowScope.TabNavigationItem(tab: Tabs, screen: Screen) {
 
     BottomNavigationItem(
         selected = selected,
-        onClick = { navigator.push(screen) },
+        onClick = { navigator.pushFront(screen) },
         icon = painterResource(id = tab.icon),
         title = tab.title
     )

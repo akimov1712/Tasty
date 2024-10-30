@@ -27,36 +27,36 @@ object Typography {
 
     val Title2 = TextStyle(
         fontFamily = Fonts.SF.SEMI_BOLD,
-        fontSize = 18.sp,
+        fontSize = 16.sp,
     )
 
     val Descr1 = TextStyle(
-        fontFamily = Fonts.SF.SEMI_BOLD,
-        fontSize = 14.sp,
+        fontFamily = Fonts.SF.MEDIUM,
+        fontSize = 13.sp,
     )
 
     val Title3 = TextStyle(
         fontFamily = Fonts.SF.MEDIUM,
-        fontSize = 20.sp,
+        fontSize = 18.sp,
     )
 
     val General1 = TextStyle(
         fontFamily = Fonts.SF.REGULAR,
-        fontSize = 17.sp,
+        fontSize = 15.sp,
     )
 
     val Title4 = TextStyle(
         fontFamily = Fonts.SF.SEMI_BOLD,
-        fontSize = 22.sp,
+        fontSize = 20.sp,
     )
 
     val Tabs2 = TextStyle(
         fontFamily = Fonts.SF.SEMI_BOLD,
-        fontSize = 18.sp,
+        fontSize = 16.sp,
     )
 
     val General2 = TextStyle(
         fontFamily = Fonts.SF.MEDIUM,
-        fontSize = 16.sp,
+        fontSize = 14.sp,
     )
 }
