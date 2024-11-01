@@ -43,6 +43,7 @@ dependencies {
 
     implementation(project(":core:ui"))
     implementation(project(":domain"))
+    implementation(project(":core:android"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -61,8 +62,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Glide
-    implementation (libs.compose)
+    // Ktor
+    implementation(libs.koin.android)
+
+    // Coil
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     // Voyager
     implementation(libs.voyager.navigator)

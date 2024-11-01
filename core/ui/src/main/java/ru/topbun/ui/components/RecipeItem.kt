@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -72,23 +74,16 @@ private fun RecipeItemImage(recipe: RecipeEntity) {
         contentAlignment = Alignment.Center
     ) {
         var imageState by remember { mutableStateOf<AsyncImagePainter.State?>(null) }
-        val imagePlaceholder = @Composable { Icon(
-            modifier = Modifier.size(64.dp, 50.dp),
-            painter = painterResource(id = R.drawable.ic_image_placeholder),
-            contentDescription = "Фото не загружено",
-            tint = Colors.GRAY_DARK
-        ) }
 
         when(imageState){
-            AsyncImagePainter.State.Empty -> { imagePlaceholder() }
-            is AsyncImagePainter.State.Error -> { imagePlaceholder() }
+            is AsyncImagePainter.State.Error -> { ImagePlaceholder() }
             is AsyncImagePainter.State.Loading -> CircularProgressIndicator(color = Colors.BLUE)
             else -> {}
         }
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
+                .aspectRatio(1.2f)
                 .clip(RoundedCornerShape(12.dp)),
             model = recipe.image,
             contentScale = ContentScale.Crop,
@@ -113,7 +108,7 @@ private fun RecipeItemImage(recipe: RecipeEntity) {
         ) {
             Icon(
                 modifier = Modifier.size(20.dp),
-                imageVector = Icons.Filled.Favorite,
+                imageVector = if (recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.Favorite,
                 contentDescription = null,
                 tint = Colors.WHITE
             )

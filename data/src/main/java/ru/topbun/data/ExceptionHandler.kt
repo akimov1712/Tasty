@@ -73,6 +73,10 @@ suspend fun HttpResponse.codeResultWrapper() = when(this.status.value) {
 }
 
 
-private suspend fun createErrorMessage(httpResponse: HttpResponse) = httpResponse.body<ErrorDTO>().message
+private suspend fun createErrorMessage(httpResponse: HttpResponse) = try {
+    httpResponse.body<ErrorDTO>().message
+} catch (e: Exception){
+    "Произошла ошибка. Попробуйте позже"
+}
 
 

@@ -4,7 +4,7 @@ import ru.topbun.domain.entity.category.CategoryEntity
 
 interface CategoryRepository {
 
-    suspend fun getCategories(): List<ru.topbun.domain.entity.category.CategoryEntity>
-    suspend fun getCategoriesWithId(id: Int): ru.topbun.domain.entity.category.CategoryEntity
+    suspend fun getCategories(q: String, offset: Int, limit: Int): List<CategoryEntity>
+    suspend fun getCategoriesWithId(id: Int): CategoryEntity
 
 }

@@ -58,8 +58,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Glide
-    implementation (libs.compose)
+    // Coil
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     // Voyager
     implementation(libs.voyager.navigator)
@@ -67,4 +68,8 @@ dependencies {
     implementation(libs.voyager.transitions)
     implementation(libs.voyager.koin)
     implementation(libs.voyager.tab.navigator)
+
+
+    // Ktor
+    implementation(libs.koin.android)
 }

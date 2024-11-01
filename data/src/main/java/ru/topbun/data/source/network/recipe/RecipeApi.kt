@@ -12,7 +12,6 @@ import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeFully
 import ru.topbun.data.source.network.ApiFactory
 import ru.topbun.data.source.network.recipe.dto.GetRecipeReceive
-import ru.topbun.data.source.network.recipe.dto.GetRecipeWithoutQueryReceive
 import ru.topbun.data.source.network.recipe.dto.RecipeDTO
 import ru.topbun.data.source.network.token
 
@@ -34,7 +33,7 @@ class RecipeApi(private val api: ApiFactory) {
 
     suspend fun getRecipesWithId(id: Int) = api.client.get("/recipe/$id")
 
-    suspend fun getRecipesWithCategory(categoryId: Int, data: GetRecipeWithoutQueryReceive) = api.client.post("/recipe/category/$categoryId"){
+    suspend fun getRecipesWithCategory(categoryId: Int, data: GetRecipeReceive) = api.client.post("/recipe/category/$categoryId"){
         setBody(data)
     }
 

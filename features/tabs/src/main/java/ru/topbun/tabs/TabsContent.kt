@@ -128,7 +128,7 @@ object TabsScreen: Screen{
                     if (selected) {
                         navigator.pop()
                     } else {
-                        navigator.pushFront(AddRecipeScreen)
+                        navigator.push(AddRecipeScreen)
                     }
                 }
             ) {
@@ -153,7 +153,7 @@ private fun RowScope.TabNavigationItem(tab: Tabs, screen: Screen) {
 
     BottomNavigationItem(
         selected = selected,
-        onClick = { navigator.pushFront(screen) },
+        onClick = { navigator.push(screen) },
         icon = painterResource(id = tab.icon),
         title = tab.title
     )

@@ -11,7 +11,6 @@ import ru.topbun.domain.entity.recipe.RecipeEntity
 import ru.topbun.domain.repository.recipe.RecipeRepository
 import ru.topbun.data.source.network.recipe.RecipeApi
 import ru.topbun.data.source.network.recipe.dto.GetRecipeReceive
-import ru.topbun.data.source.network.recipe.dto.GetRecipeWithoutQueryReceive
 import ru.topbun.data.source.network.recipe.dto.RecipeDTO
 
 class RecipeRepositoryImpl(
@@ -38,7 +37,7 @@ class RecipeRepositoryImpl(
         }
 
     override suspend fun getRecipesWithCategory(categoryId: Int, offset: Int, limit: Int): List<RecipeEntity> = exceptionWrapper {
-            val data = GetRecipeWithoutQueryReceive(offset, limit)
+            val data = GetRecipeReceive(q= "", offset, limit)
             api.getRecipesWithCategory(categoryId, data).codeResultWrapper().body<List<RecipeDTO>>().toEntity()
         }
 

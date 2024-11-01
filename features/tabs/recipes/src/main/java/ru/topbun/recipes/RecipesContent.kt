@@ -40,6 +40,7 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import ru.topbun.recipes.RecipeState.RecipeScreenState
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
+import ru.topbun.ui.components.AnimateTitle
 import ru.topbun.ui.components.RecipeItem
 import ru.topbun.ui.components.SearchTextField
 import ru.topbun.ui.components.TabRow
@@ -55,7 +56,10 @@ data object RecipesScreen : Screen {
         ) {
             val viewModel = koinScreenModel<RecipeViewModel>()
             val state by viewModel.state.collectAsState()
-            AnimateTitle(state.lazyListState.firstVisibleItemIndex == 0)
+            AnimateTitle(
+                text = "Рецепты",
+                state.lazyListState.firstVisibleItemIndex == 0
+            )
 
             SearchTextField(
                 value = state.searchQuery,
@@ -72,77 +76,65 @@ data object RecipesScreen : Screen {
         }
     }
 
-    @Composable
-    private fun AnimateTitle(isTitleVisible: Boolean) {
-        Column(
-            modifier = Modifier.animateContentSize()
-                    then if (!isTitleVisible) Modifier.height(0.dp) else Modifier.wrapContentHeight()
-        ) {
-            Text(
-                modifier = Modifier.padding(start = 12.dp),
-                text = "Рецепты",
-                style = Typography.Title1,
-                color = Colors.BLACK
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+}
+
+@Composable
+private fun ColumnScope.RecipeList(viewModel: RecipeViewModel) {
+    val state by viewModel.state.collectAsState()
+
+    Box(
+        modifier = Modifier
+            .weight(1f)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        if (state.recipes.isEmpty()) {
+            if (state.recipeState == RecipeScreenState.Loading) {
+                CircularProgressIndicator(color = Colors.BLUE)
+            }
+            if (state.recipeState == RecipeScreenState.Success) {
+                Text(text = "Пусто", style = Typography.Title3)
+            }
         }
-    }
 
-    @Composable
-    private fun ColumnScope.RecipeList(viewModel: RecipeViewModel) {
-        val state by viewModel.state.collectAsState()
-
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
+        LazyColumn(
+            state = state.lazyListState,
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            if (state.recipes.isEmpty()) {
-                if (state.recipeState == RecipeScreenState.Loading) {
-                    CircularProgressIndicator(color = Colors.BLUE)
-                }
-                if (state.recipeState == RecipeScreenState.Success) {
-                    Text(text = "Пусто", style = Typography.Title3)
+            items(state.recipes.chunked(2)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    RecipeItem(it.first())
+                    RecipeItem(it.last())
                 }
             }
+            item {
+                PaginationLoader(viewModel = viewModel, state = state)
+            }
+        }
+    }
+}
 
-            LazyColumn(
-                state = state.lazyListState,
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(15.dp)
+@Composable
+private fun PaginationLoader(viewModel: RecipeViewModel, state: RecipeState) {
+    if (!state.isEndList) {
+        val screenState = state.recipeState
+        if (listOf(RecipeScreenState.Success, RecipeScreenState.Initial).contains(screenState)) {
+            LaunchedEffect(state.recipes.toString()) {
+                viewModel.loadRecipes()
+            }
+        } else if (screenState == RecipeScreenState.Loading && state.recipes.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center,
             ) {
-                items(state.recipes.chunked(2)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        RecipeItem(it.first())
-                        RecipeItem(it.last())
-                    }
-                }
-                item {
-                    if (!state.isEndList) {
-                        val screenState = state.recipeState
-                        if (listOf(RecipeScreenState.Success, RecipeScreenState.Initial).contains(screenState)) {
-                            LaunchedEffect(state.recipes.toString()) {
-                                viewModel.loadRecipes()
-                            }
-                        } else if (screenState == RecipeScreenState.Loading && state.recipes.isNotEmpty()) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                CircularProgressIndicator(color = Colors.BLUE)
-                            }
-                        }
-                    }
-                }
+                CircularProgressIndicator(color = Colors.BLUE)
             }
         }
     }
-
-
 }
