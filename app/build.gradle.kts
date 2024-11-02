@@ -69,7 +69,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.accompanist.systemuicontroller)
 
     // Koin
     implementation(libs.koin.android)
@@ -83,17 +82,20 @@ dependencies {
     implementation(libs.voyager.koin)
 
 
+
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core:common"))
     implementation(project(":core:android"))
     implementation(project(":core:ui"))
     implementation(project(":navigation"))
-    implementation(project(":features:tabs"))
-    implementation(project(":features:tabs:recipes"))
-    implementation(project(":features:tabs:add_recipe"))
-    implementation(project(":features:tabs:category"))
-    implementation(project(":features:tabs:profile"))
-    implementation(project(":features:tabs:favorite"))
+    implementation(project(":features:main:tabs"))
+    implementation(project(":features:main:tabs:recipes"))
+    implementation(project(":features:main:tabs:add_recipe"))
+    implementation(project(":features:main:tabs:category"))
+    implementation(project(":features:main:tabs:profile"))
+    implementation(project(":features:main:tabs:favorite"))
+    implementation(project(":features:main:detail_recipe"))
+    implementation(project(":features:main"))
 
 }

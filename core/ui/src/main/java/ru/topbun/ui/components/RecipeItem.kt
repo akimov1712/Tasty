@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -39,15 +38,16 @@ import ru.topbun.common.convertCookingTime
 import ru.topbun.common.toIngredients
 import ru.topbun.domain.entity.recipe.RecipeEntity
 import ru.topbun.ui.Colors
-import ru.topbun.ui.R
 import ru.topbun.ui.Typography
 
 
 
 @Composable
-fun RowScope.RecipeItem(recipe: RecipeEntity) {
+fun RowScope.RecipeItem(recipe: RecipeEntity, onClickRecipe: (RecipeEntity) -> Unit) {
     Column(
-        Modifier.weight(1f)
+        Modifier
+            .weight(1f)
+            .clickable { onClickRecipe(recipe) }
     ) {
         RecipeItemImage(recipe)
         Spacer(modifier = Modifier.height(5.dp))
@@ -73,45 +73,23 @@ private fun RecipeItemImage(recipe: RecipeEntity) {
     Box(
         contentAlignment = Alignment.Center
     ) {
-        var imageState by remember { mutableStateOf<AsyncImagePainter.State?>(null) }
-
-        when(imageState){
-            is AsyncImagePainter.State.Error -> { ImagePlaceholder() }
-            is AsyncImagePainter.State.Loading -> CircularProgressIndicator(color = Colors.BLUE)
-            else -> {}
-        }
-        AsyncImage(
-            modifier = Modifier
+        AppAsyncImage(
+            recipe.image,
+            Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.2f)
                 .clip(RoundedCornerShape(12.dp)),
-            model = recipe.image,
-            contentScale = ContentScale.Crop,
-            contentDescription = recipe.title,
-            onState = {
-                imageState = it
-            },
+            recipe.title,
+            ContentScale.Crop
         )
 
-        Box(
+        AppIconButton(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(10.dp)
-                .size(32.dp)
-                .clip(CircleShape)
-                .background(Color.Black.copy(0.65f))
-                .clickable(
-                    indication = rememberRipple(),
-                    interactionSource = remember { MutableInteractionSource() }
-                ) { },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                modifier = Modifier.size(20.dp),
-                imageVector = if (recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.Favorite,
-                contentDescription = null,
-                tint = Colors.WHITE
-            )
+                .padding(10.dp),
+            icon = if (recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.Favorite
+        ){
+
         }
 
     }

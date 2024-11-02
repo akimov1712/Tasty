@@ -32,9 +32,9 @@ fun RowScope.CategoryItem(category: CategoryEntity) {
     Column(
         modifier = Modifier
             .weight(1f)
-            .background(Colors.WHITE)
-            .shadow(1.dp, shape = RoundedCornerShape(12.dp))
+            .shadow(3.dp, shape = RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
+            .background(Colors.WHITE)
     ) {
         CategoryItemImage(category)
         Text(
@@ -56,23 +56,13 @@ private fun CategoryItemImage(category: CategoryEntity) {
             .background(Colors.WHITE),
         contentAlignment = Alignment.Center
     ) {
-        var imageState by remember { mutableStateOf<AsyncImagePainter.State?>(null) }
-
-        when(imageState){
-            is AsyncImagePainter.State.Error -> { ImagePlaceholder() }
-            is AsyncImagePainter.State.Loading -> CircularProgressIndicator(color = Colors.BLUE)
-            else -> {}
-        }
-        AsyncImage(
+        AppAsyncImage(
+            model = category.image,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.2f),
-            model = category.image,
-            contentScale = ContentScale.Crop,
             contentDescription = category.name,
-            onState = {
-                imageState = it
-            },
+            contentScale = ContentScale.Crop
         )
 
     }

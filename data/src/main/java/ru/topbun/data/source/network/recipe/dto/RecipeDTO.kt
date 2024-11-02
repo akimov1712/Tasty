@@ -3,6 +3,7 @@ package ru.topbun.data.source.network.recipe.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.topbun.domain.entity.recipe.DifficultyType
+import ru.topbun.tasty.data.source.remote.category.dto.CategoryDTO
 import ru.topbun.tasty.data.source.remote.recipe.dto.IngredientsDTO
 import ru.topbun.tasty.data.source.remote.recipe.dto.StepDTO
 
@@ -14,7 +15,7 @@ data class RecipeDTO(
     @SerialName("description") val description: String?,
     @SerialName("image") val image: String?,
     @SerialName("isFavorite") val isFavorite: Boolean,
-    @SerialName("categoryId") val categoryId: List<Int>,
+    @SerialName("categories") val categories: List<CategoryDTO>,
     @SerialName("timeCooking") val timeCooking: Int?,
     @SerialName("difficulty") val difficulty: DifficultyType,
     @SerialName("carbs") val carbs: Int?,

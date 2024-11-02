@@ -9,5 +9,12 @@ fun CategoryDTO.toEntity() = CategoryEntity(
     image = image
 )
 
+fun CategoryEntity.toDTO() = CategoryDTO(
+    id = id,
+    name = name,
+    image = image
+)
+
 fun List<CategoryDTO>.toEntity() = map{it.toEntity()}
+fun List<CategoryEntity>.toDTO() = map{it.toDTO()}
 

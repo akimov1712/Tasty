@@ -52,7 +52,7 @@ object Typography {
 
     val Tabs2 = TextStyle(
         fontFamily = Fonts.SF.SEMI_BOLD,
-        fontSize = 16.sp,
+        fontSize = 17.sp,
     )
 
     val General2 = TextStyle(
