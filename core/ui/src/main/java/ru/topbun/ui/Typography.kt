@@ -20,6 +20,11 @@ object Typography {
         fontSize = 26.sp,
     )
 
+    val Title5 = TextStyle(
+        fontFamily = Fonts.SF.BOLD,
+        fontSize = 30.sp,
+    )
+
     val Tabs1 = TextStyle(
         fontFamily = Fonts.SF.MEDIUM,
         fontSize = 15.sp,

@@ -53,16 +53,14 @@ import ru.topbun.recipes.RecipesScreen
 import ru.topbun.ui.Colors
 import ru.topbun.ui.components.BottomNavigationItem
 
-data class TabsScreen(
-    val onOpenDetailRecipe: (RecipeEntity) -> Unit
-): Screen{
+data object TabsScreen: Screen{
 
     @Composable
     override fun Content() {
         Box(modifier = Modifier
             .size(150.dp)
             .background(Colors.BLACK))
-        Navigator(RecipesScreen(onOpenDetailRecipe)){ navigator ->
+        Navigator(RecipesScreen){ navigator ->
             Scaffold(
                 content = {
                     Box(
@@ -83,7 +81,7 @@ data class TabsScreen(
                             containerColor = Colors.WHITE,
                         ) {
                             TabNavigationItem(
-                                screen = RecipesScreen(onOpenDetailRecipe),
+                                screen = RecipesScreen,
                                 tab = Tabs.Recipes
                             )
                             TabNavigationItem(

@@ -51,6 +51,11 @@ dependencies {
     implementation(libs.ktor.negotiation)
     implementation(libs.ktor.kotlinx.serialization.json)
 
+    // Voyager
     implementation(libs.voyager.screenmodel)
     implementation(libs.voyager.navigator)
+
+
+    // Koin
+    implementation(libs.koin.android)
 }

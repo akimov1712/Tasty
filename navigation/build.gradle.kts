@@ -34,13 +34,15 @@ android {
 
 dependencies {
 
+    implementation(project(":domain"))
+    implementation(project(":core:android"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
 
     // Voyager
     implementation(libs.voyager.navigator)
@@ -49,4 +51,8 @@ dependencies {
     implementation(libs.voyager.tab.navigator)
     implementation(libs.voyager.transitions)
     implementation(libs.voyager.koin)
+
+    // Koin
+    implementation(libs.koin.android)
+
 }

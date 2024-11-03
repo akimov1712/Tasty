@@ -18,7 +18,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import ru.topbun.android.ScreenModelNavigator
+import ru.topbun.auth.AuthScreen
 import ru.topbun.detail_recipe.DetailRecipeScreen
+import ru.topbun.navigation.main.MainScreenNavigator
 import ru.topbun.tabs.TabsScreen
 import ru.topbun.ui.Colors
 
@@ -31,7 +34,7 @@ data object MainScreen : Screen {
         systemUiController.setStatusBarColor(Colors.BLUE)
         systemUiController.setNavigationBarColor(Colors.WHITE)
 
-        val viewModel = koinScreenModel<MainViewModel>()
+        val viewModel = koinScreenModel<MainScreenNavigator>()
         val state by viewModel.state.collectAsState()
 
         Scaffold{
@@ -41,14 +44,7 @@ data object MainScreen : Screen {
                     .background(Colors.WHITE)
                     .padding(it)
             ) {
-                val tabScreen = TabsScreen(
-                    onOpenDetailRecipe = {
-                        viewModel.setScreen(
-                            DetailRecipeScreen(it)
-                        )
-                    }
-                )
-                Navigator(screen = tabScreen) { navigator ->
+                Navigator(screen = AuthScreen) { navigator ->
                     CurrentScreen()
                     LaunchedEffect(key1 = state.screen) {
                         if (navigator.lastItem != state.screen) {

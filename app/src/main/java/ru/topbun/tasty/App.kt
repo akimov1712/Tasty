@@ -5,7 +5,10 @@ import cafe.adriel.voyager.core.registry.ScreenRegistry
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import ru.topbun.tabs.tabsScreenModule
+import ru.topbun.auth.AuthScreen
+import ru.topbun.detail_recipe.DetailRecipeScreen
+import ru.topbun.navigation.main.MainScreenProvider
+import ru.topbun.tabs.TabsScreen
 import ru.topbun.tasty.di.appModule
 
 class App: Application() {
@@ -26,7 +29,15 @@ class App: Application() {
 
     private fun registerScreens(){
         ScreenRegistry {
-            tabsScreenModule()
+            register<MainScreenProvider.Tabs> {
+                TabsScreen
+            }
+            register<MainScreenProvider.Auth> {
+                AuthScreen
+            }
+            register<MainScreenProvider.DetailRecipe> { provider ->
+                DetailRecipeScreen(provider.recipe)
+            }
         }
     }
 

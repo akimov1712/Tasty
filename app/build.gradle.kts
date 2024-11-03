@@ -89,6 +89,7 @@ dependencies {
     implementation(project(":core:android"))
     implementation(project(":core:ui"))
     implementation(project(":navigation"))
+    implementation(project(":features:main:auth"))
     implementation(project(":features:main:tabs"))
     implementation(project(":features:main:tabs:recipes"))
     implementation(project(":features:main:tabs:add_recipe"))

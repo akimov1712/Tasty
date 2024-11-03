@@ -36,9 +36,7 @@ import ru.topbun.ui.components.RecipeItem
 import ru.topbun.ui.components.SearchTextField
 import ru.topbun.ui.components.TabRow
 
-data class FavoriteScreen(
-    private val onOpenDetailFavorite: (RecipeEntity) -> Unit
-): Screen {
+data object FavoriteScreen: Screen {
 
     @Composable
     override fun Content() {
@@ -54,7 +52,7 @@ data class FavoriteScreen(
                 state.lazyListState.firstVisibleItemIndex == 0
             )
             Spacer(modifier = Modifier.height(10.dp))
-            FavoriteList(viewModel, onOpenDetailFavorite)
+            FavoriteList(viewModel) {}
         }
     }
 }

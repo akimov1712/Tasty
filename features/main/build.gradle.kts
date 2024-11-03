@@ -40,6 +40,7 @@ dependencies {
 
 
     implementation(project(":features:main:tabs"))
+    implementation(project(":features:main:auth"))
     implementation(project(":features:main:detail_recipe"))
 
     implementation(project(":navigation"))

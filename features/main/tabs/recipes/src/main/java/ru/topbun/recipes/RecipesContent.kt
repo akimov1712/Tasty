@@ -1,47 +1,34 @@
 package ru.topbun.recipes
 
-import android.util.Log
-import android.widget.Toast
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
+import ru.topbun.android.ScreenModelNavigator
 import ru.topbun.domain.entity.recipe.RecipeEntity
+import ru.topbun.navigation.main.MainScreenNavigator
+import ru.topbun.navigation.main.MainScreenProvider
 import ru.topbun.recipes.RecipeState.RecipeScreenState
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
@@ -50,9 +37,7 @@ import ru.topbun.ui.components.RecipeItem
 import ru.topbun.ui.components.SearchTextField
 import ru.topbun.ui.components.TabRow
 
-data class RecipesScreen(
-    val onOpenDetailRecipe: (RecipeEntity) -> Unit
-) : Screen {
+data object RecipesScreen : Screen {
 
     @Composable
     override fun Content() {
@@ -61,6 +46,7 @@ data class RecipesScreen(
                 .fillMaxSize()
                 .padding(start = 12.dp, top = 24.dp, end = 12.dp)
         ) {
+            val mainNavigator = koinScreenModel<MainScreenNavigator>()
             val viewModel = koinScreenModel<RecipeViewModel>()
             val state by viewModel.state.collectAsState()
             AnimateTitle(
@@ -79,7 +65,10 @@ data class RecipesScreen(
                 selectedIndex = state.selectedTabIndex
             ) { viewModel.changeTab(it) }
             Spacer(modifier = Modifier.height(10.dp))
-            RecipeList(viewModel, onOpenDetailRecipe)
+            RecipeList(viewModel){
+                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it))
+                mainNavigator.pushScreen(detailRecipeScreen)
+            }
         }
     }
 
