@@ -30,11 +30,6 @@ fun AppAsyncImage(
         contentAlignment = Alignment.Center
     ){
         var imageState by remember { mutableStateOf<AsyncImagePainter.State?>(null) }
-        when(imageState){
-            is AsyncImagePainter.State.Error -> { ImagePlaceholder() }
-            is AsyncImagePainter.State.Loading -> CircularProgressIndicator(color = Colors.BLUE)
-            else -> {}
-        }
         AsyncImage(
             modifier = modifier,
             model = model,
@@ -44,6 +39,11 @@ fun AppAsyncImage(
                 imageState = it
             },
         )
+        when(imageState){
+            is AsyncImagePainter.State.Error -> { ImagePlaceholder() }
+            is AsyncImagePainter.State.Loading -> CircularProgressIndicator(color = Colors.BLUE)
+            else -> {}
+        }
     }
 
 }

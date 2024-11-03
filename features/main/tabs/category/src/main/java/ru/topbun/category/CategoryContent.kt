@@ -1,5 +1,6 @@
 package ru.topbun.category
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -90,21 +95,17 @@ private fun ColumnScope.CategoryList(viewModel: CategoryViewModel) {
             }
         }
 
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
             state = state.lazyListState,
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(15.dp)
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            items(state.categories.chunked(2)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    CategoryItem(it.first())
-                    CategoryItem(it.last())
-                }
+            items(state.categories) {
+                CategoryItem(it)
             }
-            item {
+            item(span = { GridItemSpan(2) }) {
                 PaginationLoader(viewModel = viewModel, state = state)
             }
         }
@@ -116,7 +117,7 @@ private fun PaginationLoader(viewModel: CategoryViewModel, state: CategoryState)
     if (!state.isEndList) {
         val screenState = state.categoryState
         if (listOf(CategoryScreenState.Success, CategoryScreenState.Initial).contains(screenState)) {
-            LaunchedEffect(state.categories.toString()) {
+            LaunchedEffect(state.categories) {
                 viewModel.loadCategories()
             }
         } else if (screenState == CategoryScreenState.Loading && state.categories.isNotEmpty()) {

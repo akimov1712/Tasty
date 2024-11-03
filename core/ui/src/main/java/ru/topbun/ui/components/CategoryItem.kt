@@ -28,10 +28,9 @@ import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
 
 @Composable
-fun RowScope.CategoryItem(category: CategoryEntity) {
+fun CategoryItem(category: CategoryEntity) {
     Column(
         modifier = Modifier
-            .weight(1f)
             .shadow(3.dp, shape = RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
             .background(Colors.WHITE)

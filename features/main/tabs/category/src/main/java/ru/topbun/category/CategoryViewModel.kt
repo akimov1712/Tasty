@@ -1,5 +1,6 @@
 package ru.topbun.category
 
+import android.util.Log
 import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

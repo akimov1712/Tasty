@@ -39,15 +39,14 @@ import ru.topbun.common.toIngredients
 import ru.topbun.domain.entity.recipe.RecipeEntity
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
-
+import ru.topbun.ui.util.noRippleClickable
 
 
 @Composable
-fun RowScope.RecipeItem(recipe: RecipeEntity, onClickRecipe: (RecipeEntity) -> Unit) {
+fun RecipeItem(recipe: RecipeEntity, onClickRecipe: (RecipeEntity) -> Unit) {
     Column(
         Modifier
-            .weight(1f)
-            .clickable { onClickRecipe(recipe) }
+            .noRippleClickable { onClickRecipe(recipe) }
     ) {
         RecipeItemImage(recipe)
         Spacer(modifier = Modifier.height(5.dp))
@@ -78,7 +77,8 @@ private fun RecipeItemImage(recipe: RecipeEntity) {
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.2f)
-                .clip(RoundedCornerShape(12.dp)),
+                .clip(RoundedCornerShape(12.dp))
+                .background(Colors.GRAY),
             recipe.title,
             ContentScale.Crop
         )
