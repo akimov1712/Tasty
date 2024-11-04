@@ -27,12 +27,10 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import ru.topbun.auth.fragments.LoginScreen
+import ru.topbun.auth.fragments.login.LoginScreen
 import ru.topbun.ui.Colors
 import ru.topbun.ui.R
 import ru.topbun.ui.Typography
-import ru.topbun.ui.components.AppIconButton
-import ru.topbun.ui.util.noRippleClickable
 
 data object AuthScreen: Screen{
 

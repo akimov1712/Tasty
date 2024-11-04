@@ -4,9 +4,9 @@ import ru.topbun.domain.entity.auth.LoginEntity
 import ru.topbun.domain.repository.auth.AuthRepository
 
 class LoginUseCase(
-    private val repository: ru.topbun.domain.repository.auth.AuthRepository
+    private val repository: AuthRepository
 ) {
 
-    suspend operator fun invoke(login: ru.topbun.domain.entity.auth.LoginEntity) = repository.login(login)
+    suspend operator fun invoke(login: LoginEntity) = repository.login(login)
 
 }
