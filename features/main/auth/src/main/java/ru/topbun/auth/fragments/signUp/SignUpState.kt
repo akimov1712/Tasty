@@ -4,13 +4,13 @@ import android.util.Log
 
 data class SignUpState(
     val username: String = "",
-    val usernameError: String? = null,
+    val usernameError: Boolean = false,
     val email: String = "",
-    val emailError: String? = null,
+    val emailError: Boolean = false,
     val password: String = "",
-    val passwordError: String? = null,
+    val passwordError: Boolean = false,
     val confirmPassword: String = "",
-    val confirmPasswordError: String? = null,
+    val confirmPasswordError: Boolean = false,
     val showPassword: Boolean = false,
     val showConfirmPassword: Boolean = false,
     val validFields: Boolean = false,

@@ -31,20 +31,44 @@ class SignUpViewModel(
         }
     }
 
-    fun changeUsername(username: String) = updateState {
-        copy(username = username, validFields = validFields(username, email, password, confirmPassword))
+    fun changeUsername(username: String) {
+        updateState {
+            copy(
+                username = username,
+                usernameError = !username.validUsername()
+            )
+        }
+        checkValidFields()
+}
+
+    fun changeEmail(email: String) {
+        updateState {
+            copy(
+                email = email,
+                emailError = !email.validEmail()
+            )
+        }
+        checkValidFields()
     }
 
-    fun changeEmail(email: String) = updateState {
-        copy(email = email, validFields = validFields(username, email, password, confirmPassword))
+    fun changePassword(password: String) {
+        updateState {
+            copy(
+                password = password,
+                passwordError = !password.validPassword()
+            )
+        }
+        checkValidFields()
     }
 
-    fun changePassword(password: String) = updateState {
-        copy(password = password, validFields = validFields(username, email, password, confirmPassword))
-    }
-
-    fun changeConfirmPassword(confirmPassword: String) = updateState {
-        copy(confirmPassword = confirmPassword, validFields = validFields(username, email, password, confirmPassword))
+    fun changeConfirmPassword(confirmPassword: String) {
+        updateState {
+            copy(
+                confirmPassword = confirmPassword,
+                confirmPasswordError = !confirmPassword.validConfirmPassword()
+            )
+        }
+        checkValidFields()
     }
 
     fun changePasswordVisible() = updateState {
@@ -55,46 +79,20 @@ class SignUpViewModel(
         copy(showConfirmPassword = !showConfirmPassword)
     }
 
-    private fun validFields(username: String, email: String, password: String, passwordConfirm: String): Boolean{
-        val validValues = listOf(
-            username.validUsername(),
-            email.validEmail(),
-            password.validPassword(),
-            passwordConfirm.validConfirmPassword()
-        )
-        return !validValues.contains(false)
-    }
 
-    private fun String.validUsername() = if (this.length < 4){
-        updateState { copy(usernameError = "Псевдоним не может быть меньше 4 символов") }
-        Log.d("USERNAME_ERROR", stateValue.usernameError.toString())
-        Log.d("USERNAME_ERROR", stateValue.emailError.toString())
-        Log.d("USERNAME_ERROR", stateValue.passwordError.toString())
-        Log.d("USERNAME_ERROR", stateValue.confirmPasswordError.toString())
-        false
-    } else {
-        updateState { copy(usernameError = null) }; true
-    }
+    private fun String.validUsername() = this.length in 4..48
+    private fun String.validEmail() = this.validationEmail()
+    private fun String.validPassword() = this.length in 6..64
+    private fun String.validConfirmPassword() = this == stateValue.password
 
-    private fun String.validEmail() = if (this.validationEmail()){
-        updateState { copy(emailError = "Неверный формат эл. почты") }
-        false
-    } else {
-        updateState { copy(emailError = null) }; true
-    }
-
-    private fun String.validPassword() = if (this.length < 6){
-        updateState { copy(passwordError = "Пароль не может быть меньше 6 символов") }
-        false
-    } else {
-        updateState { copy(passwordError = null) }; true
-    }
-
-    private fun String.validConfirmPassword() = if (this != stateValue.password){
-        updateState { copy(confirmPasswordError = "Пароль не совпадают") }
-        false
-    } else {
-        updateState { copy(confirmPasswordError = null) }; true
+    private fun checkValidFields(){
+        val validFields = listOf(
+            stateValue.username.validUsername(),
+            stateValue.email.validEmail(),
+            stateValue.password.validPassword(),
+            stateValue.confirmPassword.validConfirmPassword()
+        ).contains(false)
+        updateState { copy(validFields = !validFields) }
     }
 
 }

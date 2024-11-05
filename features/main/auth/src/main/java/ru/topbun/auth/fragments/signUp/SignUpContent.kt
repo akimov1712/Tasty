@@ -29,6 +29,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import kotlinx.coroutines.flow.collect
 import ru.topbun.auth.fragments.login.LoginScreen
 import ru.topbun.auth.fragments.signUp.SignUpState.SignUpScreenState
 import ru.topbun.auth.fragments.signUp.SignUpState.SignUpScreenState.*
@@ -109,7 +110,7 @@ private fun Fields(viewModel: SignUpViewModel, state: SignUpState) {
     AppTextField(
         modifier = Modifier.height(48.dp),
         value = state.username,
-        errorText = state.usernameError,
+        errorText = if (state.usernameError) "Псевдоним не может быть меньше 4 символов" else null,
         onValueChange = viewModel::changeUsername,
         placeholder = "Логин",
     )
@@ -117,7 +118,7 @@ private fun Fields(viewModel: SignUpViewModel, state: SignUpState) {
     AppTextField(
         modifier = Modifier.height(48.dp),
         value = state.email,
-        errorText = state.emailError,
+        errorText = if (state.emailError) "Неверный формат эл. почты" else null,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         onValueChange = viewModel::changeEmail,
         placeholder = "Почта",
@@ -126,7 +127,7 @@ private fun Fields(viewModel: SignUpViewModel, state: SignUpState) {
     AppTextField(
         modifier = Modifier.height(48.dp),
         value = state.password,
-        errorText = state.passwordError,
+        errorText = if (state.passwordError) "Пароль не может быть меньше 6 символов" else null,
         onValueChange = viewModel::changePassword,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         placeholder = "Пароль",
@@ -151,7 +152,7 @@ private fun Fields(viewModel: SignUpViewModel, state: SignUpState) {
     AppTextField(
         modifier = Modifier.height(48.dp),
         value = state.confirmPassword,
-        errorText = state.confirmPasswordError,
+        errorText = if (state.confirmPasswordError) "Пароли не совпадают" else null,
         onValueChange = viewModel::changeConfirmPassword,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         placeholder = "Подтвердите пароль",

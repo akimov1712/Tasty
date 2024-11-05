@@ -16,6 +16,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -68,9 +70,13 @@ private fun ColumnScope.ButtonAccountNotExists(){
             .noRippleClickable {
                 navigator.push(SignUpScreen)
             },
-        text = "Регистрация",
+        text = buildAnnotatedString {
+            append("Нет аккаунта? ")
+            pushStyle(SpanStyle(color = Colors.BLUE))
+            append("Зарегистрироваться")
+        },
         style = Typography.Tabs1,
-        color = Colors.BLUE
+        color = Colors.GRAY_DARK
     )
 }
 
