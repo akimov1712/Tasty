@@ -1,6 +1,7 @@
 package ru.topbun.auth.fragments.login
 
 import cafe.adriel.voyager.core.model.screenModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.topbun.android.ScreenModelState
 import ru.topbun.android.wrapperException
@@ -16,8 +17,8 @@ class LoginViewModel(
         wrapperException({
             updateState { copy(loginScreenState = Loading) }
             val login = LoginEntity(
-                email = stateValue.email,
-                password = stateValue.password,
+                email = stateValue.email.trim(),
+                password = stateValue.password.trim(),
             )
             loginUseCase(login)
             updateState { copy(loginScreenState = Success) }
@@ -26,8 +27,10 @@ class LoginViewModel(
         }
     }
 
-    fun changeEmail(email: String) = updateState { copy(email = email) }
-    fun changePassword(password: String) = updateState { copy(password = password) }
+    fun changeEmail(email: String) = updateState { copy(email = email, validFields = validFields(email, password)) }
+    fun changePassword(password: String) = updateState { copy(password = password, validFields = validFields(email, password)) }
     fun changePasswordVisible() = updateState { copy(showPassword = !showPassword) }
+
+    private fun validFields(email: String, password: String) = password.isNotEmpty() && email.isNotEmpty()
 
 }

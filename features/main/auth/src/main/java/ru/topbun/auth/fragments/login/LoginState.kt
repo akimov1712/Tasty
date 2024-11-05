@@ -1,10 +1,12 @@
 package ru.topbun.auth.fragments.login
 
+import android.util.Log
+
 data class LoginState(
     val email: String = "",
     val password: String = "",
     val showPassword: Boolean = false,
-    val validFields: Boolean = password.isNotEmpty() && email.isNotEmpty(),
+    val validFields: Boolean = false,
     val loginScreenState: LoginScreenState = LoginScreenState.Initial
 ){
     

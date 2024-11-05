@@ -26,7 +26,7 @@ class RecipeRepositoryImpl(
         }
 
     override suspend fun getRecipes(q: String, offset: Int, limit: Int, isMyRecipe: Boolean): List<RecipeEntity> = exceptionWrapper {
-            val data = GetRecipeReceive(q, offset, limit)
+            val data = GetRecipeReceive(q.trim(), offset, limit)
             val result = if (isMyRecipe) api.getMyRecipes(data, settings.getToken())
                         else api.getRecipes(data)
             result.codeResultWrapper().body<List<RecipeDTO>>().toEntity()

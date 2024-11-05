@@ -7,7 +7,7 @@ open class ScreenModelState<T>(initialState: T): StateScreenModel<T>(initialStat
 
     val stateValue get() = state.value
 
-    fun updateState(update: T.() -> T) {
+    open fun updateState(update: T.() -> T) {
         mutableState.value = state.value.update()
     }
 

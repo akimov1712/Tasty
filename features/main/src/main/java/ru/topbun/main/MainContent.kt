@@ -44,7 +44,9 @@ data object MainScreen : Screen {
                     .background(Colors.WHITE)
                     .padding(it)
             ) {
-                Navigator(screen = AuthScreen) { navigator ->
+                Navigator(
+                    screen = AuthScreen,
+                ) { navigator ->
                     CurrentScreen()
                     LaunchedEffect(key1 = state.screen) {
                         if (navigator.lastItem != state.screen) {

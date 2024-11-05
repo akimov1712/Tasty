@@ -16,7 +16,7 @@ class CategoryRepositoryImpl(
 ): CategoryRepository {
 
     override suspend fun getCategories(q: String, offset: Int, limit: Int): List<CategoryEntity> = exceptionWrapper {
-        val data = GetCategoryReceive(q, offset, limit)
+        val data = GetCategoryReceive(q.trim(), offset, limit)
         api.getCategories(data).codeResultWrapper().body<CategoryResponse>().categories.toEntity()
     }
 

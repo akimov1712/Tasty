@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,6 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.OnBackPressed
 import cafe.adriel.voyager.navigator.currentOrThrow
 import ru.topbun.auth.fragments.login.LoginScreen
 import ru.topbun.ui.Colors
@@ -40,11 +43,15 @@ data object AuthScreen: Screen{
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 40.dp)
+                .padding(horizontal = 20.dp, vertical = 32.dp)
         ) {
             Header()
             Spacer(modifier = Modifier.height(50.dp))
-            LoginScreen.Content()
+            Box(modifier = Modifier
+                .fillMaxWidth()
+            ){
+                Navigator(screen = LoginScreen)
+            }
         }
     }
 
@@ -62,7 +69,7 @@ private fun Header() {
                 indication = rememberRipple(),
                 interactionSource = remember { MutableInteractionSource() }
             ) {
-            navigator.pop()
+                navigator.pop()
             },
         contentAlignment = Alignment.Center
     ) {
