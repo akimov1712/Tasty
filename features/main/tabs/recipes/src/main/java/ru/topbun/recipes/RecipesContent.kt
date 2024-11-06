@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -21,7 +22,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -33,6 +36,7 @@ import ru.topbun.recipes.RecipeState.RecipeScreenState
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
 import ru.topbun.ui.components.AnimateTitle
+import ru.topbun.ui.components.ErrorList
 import ru.topbun.ui.components.RecipeItem
 import ru.topbun.ui.components.SearchTextField
 import ru.topbun.ui.components.TabRow
@@ -84,6 +88,7 @@ private fun ColumnScope.RecipeList(viewModel: RecipeViewModel, onClickRecipe: (R
             .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
+
         if (state.recipes.isEmpty()) {
             if (state.recipeState == RecipeScreenState.Loading) {
                 CircularProgressIndicator(color = Colors.BLUE)
@@ -105,6 +110,14 @@ private fun ColumnScope.RecipeList(viewModel: RecipeViewModel, onClickRecipe: (R
             }
             item(span = { GridItemSpan(2) }) {
                 PaginationLoader(viewModel = viewModel, state = state)
+            }
+            val screenState = state.recipeState
+            if (screenState is RecipeScreenState.Error) {
+                item(span = { GridItemSpan(2) }) {
+                    ErrorList(text = screenState.msg) {
+                        viewModel.loadRecipes()
+                    }
+                }
             }
         }
     }

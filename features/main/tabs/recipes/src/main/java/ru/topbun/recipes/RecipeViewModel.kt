@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import okhttp3.internal.platform.android.AndroidLogHandler.publish
 import ru.topbun.android.ScreenModelState
 import ru.topbun.android.wrapperException
+import ru.topbun.android.handlerTokenException
 
 import ru.topbun.domain.useCases.recipe.GetRecipeUseCase
 import ru.topbun.recipes.RecipeState.RecipeScreenState.*
@@ -24,7 +25,7 @@ class RecipeViewModel(
 
     fun loadRecipes(){
         searchJob?.cancel()
-        searchJob = screenModelScope.launch {
+        searchJob = screenModelScope.launch(){
             wrapperException({
                 updateState { copy(recipeState = Loading) }
                 val result = getRecipeUseCase(

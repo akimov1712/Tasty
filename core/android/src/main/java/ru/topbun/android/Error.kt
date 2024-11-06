@@ -1,5 +1,7 @@
 package ru.topbun.android
 
+import kotlinx.coroutines.CoroutineExceptionHandler
+
 
 suspend fun wrapperException(tryBlock: suspend () -> Unit, onFinally: () -> Unit = {}, onError: (String) -> Unit){
     try {
@@ -20,3 +22,8 @@ suspend fun wrapperException(tryBlock: suspend () -> Unit, onFinally: () -> Unit
         onFinally()
     }
 }
+
+fun handlerTokenException(action: () -> Unit) = CoroutineExceptionHandler { _, throwable ->
+    if (throwable is FailedExtractTokenException) action()
+}
+

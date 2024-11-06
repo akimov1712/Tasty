@@ -45,7 +45,7 @@ data object MainScreen : Screen {
                     .padding(it)
             ) {
                 Navigator(
-                    screen = AuthScreen,
+                    screen = TabsScreen,
                 ) { navigator ->
                     CurrentScreen()
                     LaunchedEffect(key1 = state.screen) {
