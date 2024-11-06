@@ -8,6 +8,7 @@ import org.koin.core.context.startKoin
 import ru.topbun.auth.AuthScreen
 import ru.topbun.detail_recipe.DetailRecipeScreen
 import ru.topbun.navigation.main.MainScreenProvider
+import ru.topbun.recipe_by_category.RecipeByCategoryScreen
 import ru.topbun.tabs.TabsScreen
 import ru.topbun.tasty.di.appModule
 
@@ -37,6 +38,9 @@ class App: Application() {
             }
             register<MainScreenProvider.DetailRecipe> { provider ->
                 DetailRecipeScreen(provider.recipe)
+            }
+            register<MainScreenProvider.RecipeByCategory> { provider ->
+                RecipeByCategoryScreen(provider.category)
             }
         }
     }

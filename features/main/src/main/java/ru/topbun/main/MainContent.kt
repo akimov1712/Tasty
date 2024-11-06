@@ -32,7 +32,7 @@ data object MainScreen : Screen {
     override fun Content() {
         val systemUiController = rememberSystemUiController()
         systemUiController.setStatusBarColor(Colors.BLUE)
-        systemUiController.setNavigationBarColor(Colors.WHITE)
+        systemUiController.setNavigationBarColor(Colors.WHITE, true)
 
         val viewModel = koinScreenModel<MainScreenNavigator>()
         val state by viewModel.state.collectAsState()
@@ -48,9 +48,11 @@ data object MainScreen : Screen {
                     screen = TabsScreen,
                 ) { navigator ->
                     CurrentScreen()
-                    LaunchedEffect(key1 = state.screen) {
+                    LaunchedEffect(key1 = state.updateCount) {
                         if (navigator.lastItem != state.screen) {
-                            state.screen?.let { navigator.push(it) }
+                            state.screen?.let {
+                                navigator.push(it)
+                            }
                         }
                     }
                 }

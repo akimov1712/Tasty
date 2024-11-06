@@ -37,12 +37,15 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import ru.topbun.category.CategoryState.CategoryScreenState
 import ru.topbun.domain.entity.category.CategoryEntity
+import ru.topbun.navigation.main.MainScreenNavigator
+import ru.topbun.navigation.main.MainScreenProvider
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
 import ru.topbun.ui.components.AnimateTitle
@@ -54,6 +57,7 @@ data object CategoryScreen: Screen {
 
     @Composable
     override fun Content() {
+        val mainNavigator = koinScreenModel<MainScreenNavigator>()
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -71,13 +75,16 @@ data object CategoryScreen: Screen {
                 onValueChange = { if (it.trim().length <= 64) viewModel.changeQuery(it) }
             )
             Spacer(modifier = Modifier.height(10.dp))
-            CategoryList(viewModel)
+            CategoryList(viewModel){
+                val recipeByCategoryScreen =  ScreenRegistry.get(MainScreenProvider.RecipeByCategory(it))
+                mainNavigator.pushScreen(recipeByCategoryScreen)
+            }
         }
     }
 }
 
 @Composable
-private fun ColumnScope.CategoryList(viewModel: CategoryViewModel) {
+private fun ColumnScope.CategoryList(viewModel: CategoryViewModel, onClickCategory: (CategoryEntity) -> Unit) {
     val state by viewModel.state.collectAsState()
 
     Box(
@@ -103,7 +110,7 @@ private fun ColumnScope.CategoryList(viewModel: CategoryViewModel) {
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             items(state.categories) {
-                CategoryItem(it)
+                CategoryItem(it, onClickCategory)
             }
             item(span = { GridItemSpan(2) }) {
                 PaginationLoader(viewModel = viewModel, state = state)

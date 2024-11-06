@@ -26,14 +26,17 @@ import coil.compose.AsyncImagePainter
 import ru.topbun.domain.entity.category.CategoryEntity
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
+import ru.topbun.ui.util.noRippleClickable
+import ru.topbun.ui.util.rippleClickable
 
 @Composable
-fun CategoryItem(category: CategoryEntity) {
+fun CategoryItem(category: CategoryEntity, onClickCategory: (CategoryEntity) -> Unit) {
     Column(
         modifier = Modifier
             .shadow(3.dp, shape = RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
             .background(Colors.WHITE)
+            .rippleClickable { onClickCategory(category) }
     ) {
         CategoryItemImage(category)
         Text(

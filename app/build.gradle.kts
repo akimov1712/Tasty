@@ -72,6 +72,7 @@ dependencies {
 
     // Koin
     implementation(libs.koin.android)
+    implementation(libs.koin.compose)
 
     // Voyager
     implementation(libs.voyager.navigator)
@@ -81,15 +82,12 @@ dependencies {
     implementation(libs.voyager.transitions)
     implementation(libs.voyager.koin)
 
-
-
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core:common"))
     implementation(project(":core:android"))
     implementation(project(":core:ui"))
     implementation(project(":navigation"))
-    implementation(project(":features:main:auth"))
     implementation(project(":features:main:tabs"))
     implementation(project(":features:main:tabs:recipes"))
     implementation(project(":features:main:tabs:add_recipe"))
@@ -98,5 +96,8 @@ dependencies {
     implementation(project(":features:main:tabs:favorite"))
     implementation(project(":features:main:detail_recipe"))
     implementation(project(":features:main"))
+    implementation(project(":features:main:auth"))
+    implementation(project(":features:main:recipe_by_category"))
+
 
 }

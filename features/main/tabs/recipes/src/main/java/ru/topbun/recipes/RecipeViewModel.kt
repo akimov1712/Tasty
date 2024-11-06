@@ -19,9 +19,7 @@ class RecipeViewModel(
 
     private var searchJob: Job? = null
 
-    init {
-        loadRecipes()
-    }
+     
 
     fun loadRecipes(){
         searchJob?.cancel()
