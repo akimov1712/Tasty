@@ -32,8 +32,8 @@ class CategoryViewModel(
                 if (result.isEmpty()) updateState { copy(isEndList = true) }
                 updateState { copy(categories = categories + result) }
                 updateState { copy(categoryState = Success) }
-            }) {
-                updateState { copy(categoryState = CategoryScreenState.Error(it)) }
+            }) { _, msg ->
+                updateState { copy(categoryState = CategoryScreenState.Error(msg)) }
             }
         }
     }

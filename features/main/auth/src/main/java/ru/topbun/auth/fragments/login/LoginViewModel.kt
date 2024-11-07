@@ -22,8 +22,8 @@ class LoginViewModel(
             )
             loginUseCase(login)
             updateState { copy(loginScreenState = Success) }
-        }){
-            updateState { copy(loginScreenState = Error(it)) }
+        }){ _, msg ->
+            updateState { copy(loginScreenState = Error(msg)) }
         }
     }
 

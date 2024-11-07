@@ -66,21 +66,29 @@ data class DetailRecipeScreen(val recipe: RecipeEntity) : Screen {
             val viewModel = koinScreenModel<DetailRecipeViewModel>()
             val state by viewModel.state.collectAsState()
             Header(recipe)
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .offset(y = -32.dp)
-            ) {
-                Table(recipe)
-                Spacer(modifier = Modifier.height(20.dp))
-                TabRow(
-                    tabs = state.tabs.map { it.title },
-                    selectedIndex = state.selectedTabIndex
-                ) { viewModel.changeTabIndex(it) }
-                when (state.tabs.elementAt(state.selectedTabIndex)) {
-                    DetailRecipeTabs.GENERAL -> GeneralTabsScreen(recipe = recipe)
-                    DetailRecipeTabs.STEP_BY_STEP -> StepTabsScreen(recipe = recipe)
-                }
+            Body(state, viewModel)
+        }
+    }
+
+    @Composable
+    private fun Body(
+        state: DetailRecipeState,
+        viewModel: DetailRecipeViewModel
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .offset(y = -32.dp)
+        ) {
+            Table(recipe)
+            Spacer(modifier = Modifier.height(20.dp))
+            TabRow(
+                tabs = state.tabs.map { it.title },
+                selectedIndex = state.selectedTabIndex
+            ) { viewModel.changeTabIndex(it) }
+            when (state.tabs.elementAt(state.selectedTabIndex)) {
+                DetailRecipeTabs.GENERAL -> GeneralTabsScreen(recipe = recipe)
+                DetailRecipeTabs.STEP_BY_STEP -> StepTabsScreen(recipe = recipe)
             }
         }
     }
@@ -115,7 +123,6 @@ private fun TabRow(
 
 @Composable
 fun Table(recipe: RecipeEntity) {
-    val localDensity = LocalDensity.current
     Column(
         modifier = Modifier
             .fillMaxWidth()

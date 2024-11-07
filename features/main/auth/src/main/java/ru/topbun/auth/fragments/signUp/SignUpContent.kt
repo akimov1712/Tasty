@@ -1,6 +1,7 @@
 package ru.topbun.auth.fragments.signUp
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -13,10 +14,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -25,6 +28,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -33,6 +37,8 @@ import kotlinx.coroutines.flow.collect
 import ru.topbun.auth.fragments.login.LoginScreen
 import ru.topbun.auth.fragments.signUp.SignUpState.SignUpScreenState
 import ru.topbun.auth.fragments.signUp.SignUpState.SignUpScreenState.*
+import ru.topbun.navigation.main.MainScreenNavigator
+import ru.topbun.navigation.main.MainScreenProvider
 import ru.topbun.ui.Colors
 import ru.topbun.ui.R.*
 import ru.topbun.ui.Typography
@@ -44,7 +50,9 @@ data object SignUpScreen: Screen {
 
     @Composable
     override fun Content() {
+        val context = LocalContext.current
         val viewModel = koinScreenModel<SignUpViewModel>()
+        val mainNavigator = koinScreenModel<MainScreenNavigator>()
         val state by viewModel.state.collectAsState()
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -61,6 +69,15 @@ data object SignUpScreen: Screen {
             ButtonAccountExists()
             Spacer(modifier = Modifier.height(50.dp))
             ButtonSignUp(viewModel)
+        }
+        when(val screenState = state.signUpScreenState){
+            is Error -> LaunchedEffect(screenState) {
+                Toast.makeText(context, screenState.msg, Toast.LENGTH_SHORT).show()
+            }
+            Success -> {
+                mainNavigator.popScreen()
+            }
+            else -> {}
         }
     }
 

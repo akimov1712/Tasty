@@ -43,7 +43,7 @@ data object AuthScreen: Screen{
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 32.dp)
+                .padding(20.dp)
         ) {
             Header()
             Spacer(modifier = Modifier.height(50.dp))

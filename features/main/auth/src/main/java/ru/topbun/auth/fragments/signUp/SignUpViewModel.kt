@@ -26,8 +26,8 @@ class SignUpViewModel(
             )
             signUpUseCase(signUp)
             updateState { copy(signUpScreenState = Success) }
-        }){
-            updateState { copy(signUpScreenState = Error(it)) }
+        }){ _, msg ->
+            updateState { copy(signUpScreenState = Error(msg)) }
         }
     }
 

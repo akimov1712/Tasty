@@ -55,6 +55,12 @@ data object MainScreen : Screen {
                             }
                         }
                     }
+                    LaunchedEffect(state) {
+                        if (state.screen == null && state.updateCount != 0){
+                            navigator.pop()
+                        }
+
+                    }
                 }
             }
         }

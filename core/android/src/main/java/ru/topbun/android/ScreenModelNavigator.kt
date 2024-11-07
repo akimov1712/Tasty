@@ -17,16 +17,16 @@ import org.koin.dsl.module
 
 data class ScreenModelNavigatorState(
     val screen: Screen? = null,
-    val updateCount: Int = 0
+    val updateCount: Int = 0,
 )
 
-open class ScreenModelNavigator : ScreenModel {
-
-    private val _state = MutableStateFlow(ScreenModelNavigatorState())
-    val state: StateFlow<ScreenModelNavigatorState>
-        get() = _state
+open class ScreenModelNavigator : ScreenModelState<ScreenModelNavigatorState>(ScreenModelNavigatorState()) {
 
     fun pushScreen(screen: Screen) {
-        _state.value = state.value.copy(screen = screen, updateCount = state.value.updateCount + 1)
+        updateState { copy(screen = screen, updateCount = state.value.updateCount + 1) }
+    }
+
+    fun popScreen() {
+        updateState { copy(updateCount = state.value.updateCount + 1, screen = null) }
     }
 }

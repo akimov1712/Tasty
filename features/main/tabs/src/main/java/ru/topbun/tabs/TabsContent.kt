@@ -58,8 +58,7 @@ data object TabsScreen: Screen{
     @Composable
     override fun Content() {
         Box(modifier = Modifier
-            .size(150.dp)
-            .background(Colors.BLACK))
+            .size(150.dp))
         Navigator(RecipesScreen){ navigator ->
             Scaffold(
                 content = {
@@ -77,7 +76,7 @@ data object TabsScreen: Screen{
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(64.dp)
-                                .shadow(4.dp),
+                                .shadow(6.dp),
                             containerColor = Colors.WHITE,
                         ) {
                             TabNavigationItem(

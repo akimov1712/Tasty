@@ -1,5 +1,7 @@
 package ru.topbun.auth.fragments.login
 
+import android.app.ProgressDialog.show
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -11,10 +13,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -27,7 +31,8 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import ru.topbun.auth.fragments.signUp.SignUpScreen
-import ru.topbun.auth.fragments.login.LoginState.LoginScreenState.Loading
+import ru.topbun.auth.fragments.login.LoginState.LoginScreenState.*
+import ru.topbun.navigation.main.MainScreenNavigator
 import ru.topbun.ui.Colors
 import ru.topbun.ui.R.*
 import ru.topbun.ui.Typography
@@ -42,7 +47,10 @@ data object LoginScreen: Screen {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
+            val context = LocalContext.current
             val viewModel = koinScreenModel<LoginViewModel>()
+            val mainNavigator = koinScreenModel<MainScreenNavigator>()
+            val state by viewModel.state.collectAsState()
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = "Вход",
@@ -55,6 +63,15 @@ data object LoginScreen: Screen {
             ButtonAccountNotExists()
             Spacer(modifier = Modifier.height(50.dp))
             ButtonLogin(viewModel)
+            when(val screenState = state.loginScreenState){
+                is Error -> LaunchedEffect(screenState) {
+                    Toast.makeText(context, screenState.msg, Toast.LENGTH_SHORT).show()
+                }
+                Success -> {
+                    mainNavigator.popScreen()
+                }
+                else -> {}
+            }
         }
     }
 
@@ -86,7 +103,9 @@ private fun ButtonLogin(viewModel: LoginViewModel) {
     val screenState = state.loginScreenState
     val enabled = screenState != Loading && state.validFields
     AppButton(
-        modifier = Modifier.height(48.dp).fillMaxWidth(),
+        modifier = Modifier
+            .height(48.dp)
+            .fillMaxWidth(),
         text = "Войти",
         enabled = enabled,
         loading = state.loginScreenState == Loading

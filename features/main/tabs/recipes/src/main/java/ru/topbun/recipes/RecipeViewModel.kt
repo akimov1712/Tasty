@@ -34,8 +34,8 @@ class RecipeViewModel(
                 if (result.isEmpty()) updateState { copy(isEndList = true) }
                 updateState { copy(recipes = recipes + result) }
                 updateState { copy(recipeState = Success) }
-            }) {
-                updateState { copy(recipeState = Error(it)) }
+            }) { _, msg ->
+                updateState { copy(recipeState = Error(msg)) }
             }
         }
     }

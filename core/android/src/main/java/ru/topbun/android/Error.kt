@@ -3,21 +3,21 @@ package ru.topbun.android
 import kotlinx.coroutines.CoroutineExceptionHandler
 
 
-suspend fun wrapperException(tryBlock: suspend () -> Unit, onFinally: () -> Unit = {}, onError: (String) -> Unit){
+suspend fun wrapperException(tryBlock: suspend () -> Unit, onFinally: () -> Unit = {}, onError: (e: Exception, msg: String) -> Unit){
     try {
         tryBlock()
     } catch (e: FailedExtractTokenException) {
-        onError("Вы не авторизованы")
+        onError(e, "Вы не авторизованы")
     } catch (e: ClientException) {
-        onError(e.errorText)
+        onError(e, e.errorText)
     } catch (e: ServerException){
-        onError(e.errorText)
+        onError(e, e.errorText)
     } catch (e: RequestTimeoutException) {
-        onError("Время ожидания истекло")
+        onError(e, "Время ожидания истекло")
     }  catch (e: ParseBackendResponseException) {
-        onError("Не удалось получить данные с сервера")
+        onError(e, "Не удалось получить данные с сервера")
     } catch (e: ConnectException){
-        onError("Проверьте интернет подключение")
+        onError(e, "Проверьте интернет подключение")
     } finally {
         onFinally()
     }

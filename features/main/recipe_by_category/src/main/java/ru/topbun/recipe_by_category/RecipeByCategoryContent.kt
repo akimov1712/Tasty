@@ -50,7 +50,7 @@ import ru.topbun.recipe_by_category.RecipeByCategoryState.RecipeScreenState.*
 import ru.topbun.ui.Colors
 import ru.topbun.ui.R
 import ru.topbun.ui.Typography
-import ru.topbun.ui.components.ErrorList
+import ru.topbun.ui.components.ErrorComponent
 import ru.topbun.ui.components.RecipeItem
 
 data class RecipeByCategoryScreen(val category: CategoryEntity): Screen{
@@ -110,7 +110,7 @@ private fun ColumnScope.RecipeList(viewModel: RecipeByCategoryViewModel, onClick
             val screenState = state.recipeState
             if (screenState is Error) {
                 item(span = { GridItemSpan(2) }) {
-                    ErrorList(text = screenState.msg) {
+                    ErrorComponent(text = screenState.msg) {
                         viewModel.loadRecipes()
                     }
                 }

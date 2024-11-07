@@ -1,7 +1,10 @@
 package ru.topbun.tasty.di
 
 import org.koin.dsl.module
+import ru.topbun.domain.useCases.auth.CheckExistsTokenUseCase
+import ru.topbun.domain.useCases.auth.GetAccountInfoUseCase
 import ru.topbun.domain.useCases.auth.LoginUseCase
+import ru.topbun.domain.useCases.auth.LogoutUseCase
 import ru.topbun.domain.useCases.auth.SignUpUseCase
 import ru.topbun.domain.useCases.category.GetCategoriesUseCase
 import ru.topbun.domain.useCases.category.GetCategoriesWithIdUseCase
@@ -55,6 +58,23 @@ val useCasesModule = module {
     }
     single<UploadImageUseCase> {
         UploadImageUseCase(
+            get()
+        )
+    }
+    single<GetAccountInfoUseCase> {
+        GetAccountInfoUseCase(
+            get()
+        )
+    }
+
+    single<CheckExistsTokenUseCase> {
+        CheckExistsTokenUseCase(
+            get()
+        )
+    }
+
+    single<LogoutUseCase> {
+        LogoutUseCase(
             get()
         )
     }

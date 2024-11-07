@@ -33,7 +33,7 @@ fun AppTextField(
     modifier: Modifier = Modifier,
     placeholder: String = "",
     iconButton: (@Composable () -> Unit)? = null,
-    padding: PaddingValues = PaddingValues(vertical = 14.dp, horizontal = 16.dp),
+    padding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     enabled: Boolean = true,
     errorText: String? = null,
     textStyle: TextStyle = Typography.Placeholder1.copy(color = Colors.GRAY_DARK),
