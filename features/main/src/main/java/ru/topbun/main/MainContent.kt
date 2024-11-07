@@ -49,7 +49,7 @@ data object MainScreen : Screen {
                 ) { navigator ->
                     CurrentScreen()
                     LaunchedEffect(key1 = state.updateCount) {
-                        if (navigator.lastItem != state.screen) {
+                        if (navigator.lastItemOrNull != state.screen) {
                             state.screen?.let {
                                 navigator.push(it)
                             }

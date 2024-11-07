@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -87,7 +88,7 @@ private fun RecipeItemImage(recipe: RecipeEntity) {
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(10.dp),
-            icon = if (recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.Favorite
+            icon = if (recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
         ){
 
         }

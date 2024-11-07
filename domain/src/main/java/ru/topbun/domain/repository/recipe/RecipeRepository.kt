@@ -9,5 +9,6 @@ interface RecipeRepository {
     suspend fun getRecipesWithId(id: Int): RecipeEntity
     suspend fun getRecipesWithCategory(categoryId: Int, offset: Int, limit: Int): List<RecipeEntity>
     suspend fun uploadImage(image: ByteArray): String
+    suspend fun changeFavorite(recipeId: Int, isFavorite: Boolean): Boolean
 
 }

@@ -6,5 +6,7 @@ import ru.topbun.detail_recipe.DetailRecipeViewModel
 import ru.topbun.domain.entity.recipe.RecipeEntity
 
 val detailRecipeModule = module {
-    factory { DetailRecipeViewModel() }
+    factory { (recipe: RecipeEntity) ->
+        DetailRecipeViewModel(recipe, get())
+    }
 }

@@ -10,6 +10,8 @@ import ru.topbun.data.source.local.dataStore.getToken
 import ru.topbun.domain.entity.recipe.RecipeEntity
 import ru.topbun.domain.repository.recipe.RecipeRepository
 import ru.topbun.data.source.network.recipe.RecipeApi
+import ru.topbun.data.source.network.recipe.dto.FavoriteDTO
+import ru.topbun.data.source.network.recipe.dto.FavoriteReceive
 import ru.topbun.data.source.network.recipe.dto.GetRecipeReceive
 import ru.topbun.data.source.network.recipe.dto.RecipeDTO
 
@@ -44,4 +46,12 @@ class RecipeRepositoryImpl(
     override suspend fun uploadImage(image: ByteArray): String = exceptionWrapper {
             api.uploadImage(image).body()
         }
+
+    override suspend fun changeFavorite(recipeId: Int, favorite: Boolean): Boolean = exceptionWrapper {
+        api.changeFavorite(
+            recipeId = recipeId,
+            favoriteReceive = FavoriteReceive(favorite),
+            token = settings.getToken()
+        ).codeResultWrapper().body<FavoriteDTO>().isFavorite
+    }
 }

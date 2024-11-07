@@ -1,5 +1,6 @@
 package ru.topbun.detail_recipe
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,14 +35,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.koin.compose.getKoin
+import org.koin.core.parameter.parametersOf
 import ru.topbun.common.convertCookingTime
 import ru.topbun.common.improveImageQuality
 import ru.topbun.detail_recipe.tabs.DetailRecipeTabs
@@ -63,10 +69,15 @@ data class DetailRecipeScreen(val recipe: RecipeEntity) : Screen {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            val viewModel = koinScreenModel<DetailRecipeViewModel>()
+            val context = LocalContext.current
+            val koin = getKoin()
+            val viewModel = rememberScreenModel {
+                koin.get<DetailRecipeViewModel>{ parametersOf(recipe) }
+            }
             val state by viewModel.state.collectAsState()
-            Header(recipe)
+            Header(state.recipe){ viewModel.changeFavorite() }
             Body(state, viewModel)
+            if(state.errorMessage != null) Toast.makeText(context, state.errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -204,7 +215,7 @@ private fun CharactItem(
 }
 
 @Composable
-private fun Header(recipe: RecipeEntity) {
+private fun Header(recipe: RecipeEntity, onClickFavorite: () -> Unit) {
     val navigator = LocalNavigator.currentOrThrow
     Box(
         modifier = Modifier
@@ -229,9 +240,9 @@ private fun Header(recipe: RecipeEntity) {
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(12.dp),
-            icon = if (recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.Favorite
+            icon = if (recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
         ) {
-
+            onClickFavorite()
         }
     }
 }
