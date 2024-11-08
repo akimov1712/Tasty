@@ -44,12 +44,12 @@ import ru.topbun.ui.util.noRippleClickable
 
 
 @Composable
-fun RecipeItem(recipe: RecipeEntity, onClickRecipe: (RecipeEntity) -> Unit) {
+fun RecipeItem(recipe: RecipeEntity, onClickFavorite: () -> Unit, onClickRecipe: (RecipeEntity) -> Unit) {
     Column(
         Modifier
             .noRippleClickable { onClickRecipe(recipe) }
     ) {
-        RecipeItemImage(recipe)
+        RecipeItemImage(recipe, onClickFavorite)
         Spacer(modifier = Modifier.height(5.dp))
         Column(modifier = Modifier.padding(start = 3.dp)){
             Text(
@@ -69,7 +69,7 @@ fun RecipeItem(recipe: RecipeEntity, onClickRecipe: (RecipeEntity) -> Unit) {
 }
 
 @Composable
-private fun RecipeItemImage(recipe: RecipeEntity) {
+private fun RecipeItemImage(recipe: RecipeEntity, onClickFavorite: () -> Unit) {
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -90,7 +90,7 @@ private fun RecipeItemImage(recipe: RecipeEntity) {
                 .padding(10.dp),
             icon = if (recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
         ){
-
+            onClickFavorite()
         }
 
     }

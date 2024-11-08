@@ -9,17 +9,34 @@ import okhttp3.internal.platform.android.AndroidLogHandler.publish
 import ru.topbun.android.ScreenModelState
 import ru.topbun.android.wrapperException
 import ru.topbun.android.handlerTokenException
+import ru.topbun.domain.useCases.recipe.ChangeFavoriteUseCase
 
 import ru.topbun.domain.useCases.recipe.GetRecipeUseCase
 import ru.topbun.recipes.RecipeState.RecipeScreenState.*
 
 class RecipeViewModel(
     private val getRecipeUseCase: GetRecipeUseCase,
+    private val changeFavoriteUseCase: ChangeFavoriteUseCase
 ): ScreenModelState<RecipeState>(RecipeState()) {
 
     private var searchJob: Job? = null
 
-     
+    fun changeFavorite(recipeId: Int, value: Boolean) = screenModelScope.launch {
+        wrapperException({
+            val favorite = changeFavoriteUseCase(recipeId, value)
+            updateState {
+                val newRecipes = recipes.toMutableList()
+                newRecipes.replaceAll {
+                    if (it.id == recipeId)it.copy(isFavorite = favorite)
+                    else it
+                }
+                copy(recipes = newRecipes)
+            }
+            updateState { copy(favoriteState = RecipeState.FavoriteScreenState.Success) }
+        }){ _, msg ->
+            updateState { copy(favoriteState = RecipeState.FavoriteScreenState.Error(msg)) }
+        }
+    }
 
     fun loadRecipes(){
         searchJob?.cancel()

@@ -5,6 +5,6 @@ import ru.topbun.recipe_by_category.RecipeByCategoryViewModel
 
 val recipeByCategoryModule = module {
     factory { (categoryId: Int) ->
-        RecipeByCategoryViewModel(categoryId, get())
+        RecipeByCategoryViewModel(categoryId, get(), get())
     }
 }

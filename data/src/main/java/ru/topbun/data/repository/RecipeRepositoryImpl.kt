@@ -1,10 +1,13 @@
 package ru.topbun.data.repository
 
 import io.ktor.client.call.body
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import ru.topbun.data.codeResultWrapper
 import ru.topbun.data.exceptionWrapper
 import ru.topbun.data.mapper.toDTO
 import ru.topbun.data.mapper.toEntity
+import ru.topbun.data.source.local.dataStore.AppSettings
 import ru.topbun.data.source.local.dataStore.Settings
 import ru.topbun.data.source.local.dataStore.getToken
 import ru.topbun.domain.entity.recipe.RecipeEntity
@@ -29,18 +32,31 @@ class RecipeRepositoryImpl(
 
     override suspend fun getRecipes(q: String, offset: Int, limit: Int, isMyRecipe: Boolean): List<RecipeEntity> = exceptionWrapper {
             val data = GetRecipeReceive(q.trim(), offset, limit)
-            val result = if (isMyRecipe) api.getMyRecipes(data, settings.getToken())
-                        else api.getRecipes(data)
+            val result = if (isMyRecipe) {
+                api.getMyRecipes(data, settings.getToken())
+            }
+            else {
+                val token = settings.data
+                    .map { it[AppSettings.KEY_TOKEN] }
+                    .firstOrNull() ?: ""
+                api.getRecipes(data, token)
+            }
             result.codeResultWrapper().body<List<RecipeDTO>>().toEntity()
         }
 
     override suspend fun getRecipesWithId(id: Int): RecipeEntity = exceptionWrapper {
-            api.getRecipesWithId(id).codeResultWrapper().body<RecipeDTO>().toEntity()
-        }
+        val token = settings.data
+            .map { it[AppSettings.KEY_TOKEN] }
+            .firstOrNull() ?: ""
+        api.getRecipesWithId(id, token).codeResultWrapper().body<RecipeDTO>().toEntity()
+    }
 
     override suspend fun getRecipesWithCategory(categoryId: Int, offset: Int, limit: Int): List<RecipeEntity> = exceptionWrapper {
             val data = GetRecipeReceive(q= "", offset, limit)
-            api.getRecipesWithCategory(categoryId, data).codeResultWrapper().body<List<RecipeDTO>>().toEntity()
+            val token = settings.data
+                .map { it[AppSettings.KEY_TOKEN] }
+                .firstOrNull() ?: ""
+            api.getRecipesWithCategory(categoryId, data, token).codeResultWrapper().body<List<RecipeDTO>>().toEntity()
         }
 
     override suspend fun uploadImage(image: ByteArray): String = exceptionWrapper {

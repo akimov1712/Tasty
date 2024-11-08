@@ -6,8 +6,16 @@ import ru.topbun.domain.entity.recipe.RecipeEntity
 data class RecipeByCategoryState(
     val isEndList: Boolean = false,
     val recipes: List<RecipeEntity> = emptyList(),
-    val recipeState: RecipeScreenState = RecipeScreenState.Initial
+    val recipeState: RecipeScreenState = RecipeScreenState.Initial,
+    val favoriteState: FavoriteScreenState = FavoriteScreenState.Initial
 ){
+
+    sealed interface FavoriteScreenState{
+        data object Initial: FavoriteScreenState
+        data class Error(val msg: String): FavoriteScreenState
+        data object Success: FavoriteScreenState
+    }
+
 
     sealed interface RecipeScreenState{
         data object Initial: RecipeScreenState

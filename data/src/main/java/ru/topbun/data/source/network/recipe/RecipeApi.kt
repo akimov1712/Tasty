@@ -23,7 +23,8 @@ class RecipeApi(private val api: ApiFactory) {
         token(token)
     }
 
-    suspend fun getRecipes(data: GetRecipeReceive) = api.client.post("/recipe"){
+    suspend fun getRecipes(data: GetRecipeReceive, token: String) = api.client.post("/recipe"){
+        token(token)
         setBody(data)
     }
 
@@ -32,10 +33,13 @@ class RecipeApi(private val api: ApiFactory) {
         token(token)
     }
 
-    suspend fun getRecipesWithId(id: Int) = api.client.get("/recipe/$id")
+    suspend fun getRecipesWithId(id: Int, token: String) = api.client.post("/recipe/$id"){
+        token(token)
+    }
 
-    suspend fun getRecipesWithCategory(categoryId: Int, data: GetRecipeReceive) = api.client.post("/recipe/category/$categoryId"){
+    suspend fun getRecipesWithCategory(categoryId: Int, data: GetRecipeReceive, token: String) = api.client.post("/recipe/category/$categoryId"){
         setBody(data)
+        token(token)
     }
 
     suspend fun changeFavorite(recipeId: Int, favoriteReceive: FavoriteReceive, token: String) = api.client.post("/favorite/$recipeId"){

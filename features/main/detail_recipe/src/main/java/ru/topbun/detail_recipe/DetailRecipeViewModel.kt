@@ -5,24 +5,46 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.launch
 import ru.topbun.android.ScreenModelState
 import ru.topbun.android.wrapperException
+import ru.topbun.detail_recipe.DetailRecipeState.DetailRecipeScreenState
+import ru.topbun.detail_recipe.DetailRecipeState.DetailRecipeScreenState.*
 import ru.topbun.domain.entity.recipe.RecipeEntity
 import ru.topbun.domain.useCases.recipe.ChangeFavoriteUseCase
+import ru.topbun.domain.useCases.recipe.GetRecipeWithIdUseCase
 
 class DetailRecipeViewModel(
-    private val recipes: RecipeEntity,
-    private val changeFavoriteUseCase: ChangeFavoriteUseCase
-): ScreenModelState<DetailRecipeState>(DetailRecipeState(recipes)) {
+    private val recipesId: Int,
+    private val changeFavoriteUseCase: ChangeFavoriteUseCase,
+    private val getRecipeWithIdUseCase: GetRecipeWithIdUseCase,
+): ScreenModelState<DetailRecipeState>(DetailRecipeState()) {
 
     fun changeTabIndex(index: Int) = updateState { copy(selectedTabIndex = index) }
 
-    fun changeFavorite() = screenModelScope.launch {
+    init {
+        loadRecipe()
+    }
+
+    fun loadRecipe() = screenModelScope.launch {
         wrapperException({
-            println(stateValue.recipe)
-            val favorite = changeFavoriteUseCase(stateValue.recipe.id, !stateValue.recipe.isFavorite)
-            updateState { copy(recipe = recipe.copy(isFavorite = favorite)) }
-            println(stateValue.recipe)
+            updateState { copy(screenState = Loading) }
+            val recipe = getRecipeWithIdUseCase(recipesId)
+            updateState { copy(screenState = Success(recipe)) }
         }){ _, msg ->
-            updateState { copy(errorMessage = msg) }
+            updateState { copy(screenState = Error(msg)) }
+        }
+    }
+
+    fun changeFavorite(value: Boolean) = screenModelScope.launch {
+        wrapperException({
+            val favorite = changeFavoriteUseCase(recipesId, value)
+            updateState {
+                val screenState = screenState
+                if(screenState is Success){
+                    copy(screenState = screenState.copy(screenState.recipe.copy(isFavorite = favorite)))
+                } else this
+            }
+
+        }){ _, msg ->
+            updateState { copy(screenState = Error(msg)) }
         }
     }
 

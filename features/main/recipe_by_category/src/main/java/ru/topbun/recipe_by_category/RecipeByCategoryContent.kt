@@ -1,5 +1,6 @@
 package ru.topbun.recipe_by_category
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -33,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.ScreenRegistry
@@ -64,12 +66,14 @@ data class RecipeByCategoryScreen(val category: CategoryEntity): Screen{
         ) {
             val viewModel = getKoin().get<RecipeByCategoryViewModel>{ parametersOf(category.id) }
             val mainNavigator = koinScreenModel<MainScreenNavigator>()
+            val state by viewModel.state.collectAsState()
             Header(category.name)
             Spacer(modifier = Modifier.height(24.dp))
             RecipeList(viewModel){
-                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it))
+                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it.id))
                 mainNavigator.pushScreen(detailRecipeScreen)
             }
+
         }
     }
 
@@ -85,6 +89,15 @@ private fun ColumnScope.RecipeList(viewModel: RecipeByCategoryViewModel, onClick
             .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
+        val context = LocalContext.current
+        when(val screenState = state.favoriteState){
+            is RecipeByCategoryState.FavoriteScreenState.Error -> {
+                LaunchedEffect(state.favoriteState) {
+                    Toast.makeText(context, screenState.msg, Toast.LENGTH_SHORT).show()
+                }
+            }
+            else -> {}
+        }
 
         if (state.recipes.isEmpty()) {
             if (state.recipeState == Loading) {
@@ -102,7 +115,7 @@ private fun ColumnScope.RecipeList(viewModel: RecipeByCategoryViewModel, onClick
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(state.recipes){
-                RecipeItem(it, onClickRecipe)
+                RecipeItem(it, {viewModel.changeFavorite(it.id, !it.isFavorite)}, onClickRecipe)
             }
             item(span = { GridItemSpan(2) }) {
                 PaginationLoader(viewModel = viewModel, state = state)
@@ -124,7 +137,7 @@ private fun PaginationLoader(viewModel: RecipeByCategoryViewModel, state: Recipe
     if (!state.isEndList) {
         val screenState = state.recipeState
         if (listOf(Success, Initial).contains(screenState)) {
-            LaunchedEffect(state.recipes.toString()) {
+            LaunchedEffect(state.recipes) {
                 viewModel.loadRecipes()
             }
         } else if (screenState == Loading && state.recipes.isNotEmpty()) {

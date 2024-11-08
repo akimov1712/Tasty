@@ -1,5 +1,6 @@
 package ru.topbun.recipes
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
@@ -46,6 +48,7 @@ data object RecipesScreen : Screen {
                 .fillMaxSize()
                 .padding(start = 12.dp, top = 24.dp, end = 12.dp)
         ) {
+            val context = LocalContext.current
             val mainNavigator = koinScreenModel<MainScreenNavigator>()
             val viewModel = koinScreenModel<RecipeViewModel>()
             val state by viewModel.state.collectAsState()
@@ -53,7 +56,6 @@ data object RecipesScreen : Screen {
                 text = "Рецепты",
                 state.lazyListState.firstVisibleItemIndex == 0
             )
-
             SearchTextField(
                 value = state.searchQuery,
                 onValueChange = { if (it.trim().length <= 64) viewModel.changeQuery(it) }
@@ -66,8 +68,16 @@ data object RecipesScreen : Screen {
             ) { viewModel.changeTab(it) }
             Spacer(modifier = Modifier.height(10.dp))
             RecipeList(viewModel){
-                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it))
+                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it.id))
                 mainNavigator.pushScreen(detailRecipeScreen)
+            }
+            when(val screenState = state.favoriteState){
+                is RecipeState.FavoriteScreenState.Error -> {
+                    LaunchedEffect(state.favoriteState) {
+                        Toast.makeText(context, screenState.msg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                else -> {}
             }
         }
     }
@@ -102,7 +112,13 @@ private fun ColumnScope.RecipeList(viewModel: RecipeViewModel, onClickRecipe: (R
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(state.recipes){
-                RecipeItem(it, onClickRecipe)
+                RecipeItem(
+                    recipe = it,
+                    onClickFavorite = {
+                        viewModel.changeFavorite(it.id, !it.isFavorite)
+                    },
+                    onClickRecipe = onClickRecipe
+                )
             }
             item(span = { GridItemSpan(2) }) {
                 PaginationLoader(viewModel = viewModel, state = state)
