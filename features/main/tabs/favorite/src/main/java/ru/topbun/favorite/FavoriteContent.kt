@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,15 +22,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
 import ru.topbun.domain.entity.recipe.RecipeEntity
-import ru.topbun.favorite.FavoriteState.FavoriteScreenState
 import ru.topbun.favorite.FavoriteState.FavoriteScreenState.*
 import ru.topbun.navigation.main.MainScreenNavigator
 import ru.topbun.navigation.main.MainScreenProvider
@@ -39,8 +34,6 @@ import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
 import ru.topbun.ui.components.AnimateTitle
 import ru.topbun.ui.components.RecipeItem
-import ru.topbun.ui.components.SearchTextField
-import ru.topbun.ui.components.TabRow
 
 data object FavoriteScreen: Screen {
 
@@ -54,6 +47,9 @@ data object FavoriteScreen: Screen {
             val mainNavigator = koinScreenModel<MainScreenNavigator>()
             val viewModel = koinScreenModel<FavoriteViewModel>()
             val state by viewModel.state.collectAsState()
+            LaunchedEffect(Unit) {
+                viewModel.loadRecipes()
+            }
             AnimateTitle(
                 text = "Избранные",
                 state.lazyListState.firstVisibleItemIndex == 0

@@ -47,6 +47,10 @@ class RecipeApi(private val api: ApiFactory) {
         setBody(favoriteReceive)
     }
 
+    suspend fun getFavoritesRecipe(token: String) = api.client.get("/favorite"){
+        token(token)
+    }
+
     suspend fun uploadImage(image: ByteArray) = api.client.submitFormWithBinaryData(
         url = "/upload",
         formData = formData {

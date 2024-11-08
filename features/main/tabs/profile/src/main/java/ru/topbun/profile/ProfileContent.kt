@@ -120,7 +120,7 @@ private fun SuccessContent(user: UserEntity, onClickLogOut: () -> Unit) {
 private fun IconWithText(iconRes: Int, text: String, color: Color = Colors.BLACK, onClick: (() -> Unit)? = null) {
     val clickable = if(onClick == null) Modifier else Modifier.rippleClickable { onClick() }
     Row(
-        modifier = Modifier.fillMaxWidth().then(clickable).padding(vertical = 20.dp, horizontal = 10.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp).clip(RoundedCornerShape(8.dp)).then(clickable).padding(vertical = 10.dp, horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ){
         Icon(

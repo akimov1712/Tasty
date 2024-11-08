@@ -70,4 +70,8 @@ class RecipeRepositoryImpl(
             token = settings.getToken()
         ).codeResultWrapper().body<FavoriteDTO>().isFavorite
     }
+
+    override suspend fun getFavoritesRecipes(): List<RecipeEntity> = exceptionWrapper{
+        api.getFavoritesRecipe(settings.getToken()).codeResultWrapper().body<List<RecipeDTO>>().toEntity()
+    }
 }

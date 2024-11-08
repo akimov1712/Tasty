@@ -4,5 +4,5 @@ import org.koin.dsl.module
 import ru.topbun.favorite.FavoriteViewModel
 
 val favoriteModule = module {
-    single { FavoriteViewModel(get()) }
+    factory { FavoriteViewModel(get(), get()) }
 }

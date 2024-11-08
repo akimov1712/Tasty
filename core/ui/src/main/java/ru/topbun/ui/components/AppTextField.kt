@@ -48,7 +48,11 @@ fun AppTextField(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.5.dp, Colors.BLUE_GRAY, RoundedCornerShape(8.dp)),
+                .border(
+                    1.5.dp,
+                    if(errorText.isNullOrEmpty()) Colors.BLUE_GRAY else Colors.RED,
+                    RoundedCornerShape(8.dp)
+                ),
             verticalAlignment = Alignment.CenterVertically
         ){
             Box(
