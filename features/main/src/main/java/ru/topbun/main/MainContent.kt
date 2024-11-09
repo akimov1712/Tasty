@@ -1,6 +1,5 @@
 package ru.topbun.main
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,13 +13,8 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import ru.topbun.android.ScreenModelNavigator
-import ru.topbun.auth.AuthScreen
-import ru.topbun.detail_recipe.DetailRecipeScreen
 import ru.topbun.navigation.main.MainScreenNavigator
 import ru.topbun.tabs.TabsScreen
 import ru.topbun.ui.Colors

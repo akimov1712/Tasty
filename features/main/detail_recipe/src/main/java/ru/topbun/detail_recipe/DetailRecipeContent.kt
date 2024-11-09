@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -14,16 +15,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,11 +43,15 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import coil.compose.AsyncImage
 import org.koin.compose.getKoin
 import org.koin.core.parameter.parametersOf
 import ru.topbun.common.convertCookingTime
@@ -51,14 +62,20 @@ import ru.topbun.detail_recipe.DetailRecipeState.DetailRecipeScreenState.Success
 import ru.topbun.detail_recipe.tabs.DetailRecipeTabs
 import ru.topbun.detail_recipe.tabs.GeneralTabsScreen
 import ru.topbun.detail_recipe.tabs.StepTabsScreen
+import ru.topbun.domain.entity.category.CategoryEntity
 import ru.topbun.domain.entity.recipe.RecipeEntity
+import ru.topbun.navigation.main.MainScreenNavigator
+import ru.topbun.navigation.main.MainScreenProvider
 import ru.topbun.ui.Colors
 import ru.topbun.ui.R
 import ru.topbun.ui.Typography
 import ru.topbun.ui.components.AppAsyncImage
+import ru.topbun.ui.components.AppButton
 import ru.topbun.ui.components.AppIconButton
+import ru.topbun.ui.components.DialogWrapper
 import ru.topbun.ui.components.ErrorComponent
 import ru.topbun.ui.util.noRippleClickable
+import ru.topbun.ui.util.rippleClickable
 
 data class DetailRecipeScreen(val recipeId: Int) : Screen {
 
@@ -69,8 +86,8 @@ data class DetailRecipeScreen(val recipeId: Int) : Screen {
                 .fillMaxSize(), contentAlignment = Alignment.Center
         ) {
             val koin = getKoin()
-            val viewModel =
-                rememberScreenModel { koin.get<DetailRecipeViewModel> { parametersOf(recipeId) } }
+            val viewModel = rememberScreenModel { koin.get<DetailRecipeViewModel> { parametersOf(recipeId) } }
+            val mainNavigator = koinScreenModel<MainScreenNavigator>()
             val state by viewModel.state.collectAsState()
             val screenState = state.screenState
             Column(
@@ -83,7 +100,11 @@ data class DetailRecipeScreen(val recipeId: Int) : Screen {
                         viewModel.changeFavorite(!screenState.recipe.isFavorite)
                     }
                 }
-                if(screenState is Success) Body(state, screenState.recipe, viewModel)
+                if(screenState is Success) {
+                    Body(state, screenState.recipe, viewModel){
+
+                    }
+                }
 
             }
             when (screenState) {
@@ -100,14 +121,22 @@ data class DetailRecipeScreen(val recipeId: Int) : Screen {
     private fun Body(
         state: DetailRecipeState,
         recipe: RecipeEntity,
-        viewModel: DetailRecipeViewModel
+        viewModel: DetailRecipeViewModel,
+        onClickCategory: (CategoryEntity) -> Unit,
     ) {
+        if (state.showModalCategories){
+            CategoriesModal(
+                categories = recipe.categories,
+                onDismiss = { viewModel.hideCategoriesModal()},
+                onClickCategory = onClickCategory
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .offset(y = -32.dp)
         ) {
-            Table(recipe)
+            Table(viewModel, recipe)
             Spacer(modifier = Modifier.height(20.dp))
             TabRow(
                 tabs = state.tabs.map { it.title },
@@ -149,7 +178,7 @@ private fun TabRow(
 }
 
 @Composable
-fun Table(recipe: RecipeEntity) {
+fun Table(viewModel: DetailRecipeViewModel, recipe: RecipeEntity) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -180,13 +209,13 @@ fun Table(recipe: RecipeEntity) {
                 .padding(vertical = 20.dp),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            val textTags = if (recipe.categories.isEmpty()) "Отсутсвуют"
+            val textTags = if (recipe.categories.isEmpty()) "Отсутствуют"
             else "${recipe.categories.first().name.take(10)} + ${recipe.categories.size - 1}"
             CharactItem(
                 icon = painterResource(id = R.drawable.ic_tag),
                 text = textTags
             ) {
-
+                viewModel.showCategoriesModal()
             }
             CharactItem(
                 icon = painterResource(id = R.drawable.ic_time),
@@ -265,5 +294,64 @@ private fun Header(state: DetailRecipeState, onClickFavorite: () -> Unit) {
         ) {
             onClickFavorite()
         }
+    }
+}
+
+@Composable
+private fun CategoriesModal(
+    categories: List<CategoryEntity>,
+    onDismiss: () -> Unit,
+    onClickCategory: (CategoryEntity) -> Unit,
+) {
+    DialogWrapper(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp)
+            .background(color = Colors.WHITE, RoundedCornerShape(12.dp))
+            .padding(horizontal = 32.dp, vertical = 18.dp),
+        onDismissDialog = onDismiss
+    ) {
+        LazyColumn(
+            modifier = Modifier.align(Alignment.Start),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ){
+            items(items = categories) {
+                CategoriesDialogItem(it, onClickCategory)
+            }
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        TextButton(
+            modifier = Modifier.align(Alignment.End),
+            onClick = onDismiss,
+        ) {
+            Text(
+                text = "Закрыть",
+                style = Typography.Title2,
+                color = Colors.BLUE
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoriesDialogItem(category: CategoryEntity, onClick: (CategoryEntity) -> Unit) {
+    Row(
+        modifier = Modifier.noRippleClickable { onClick(category) },
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        AppAsyncImage(
+            modifier = Modifier
+                .size(42.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            placeholderSize = DpSize(32.dp ,25.dp),
+            model = category.image,
+            contentDescription = category.name
+        )
+        Spacer(modifier = Modifier.widthIn(10.dp))
+        Text(
+            text = category.name,
+            style = Typography.Title2,
+            color = Colors.BLACK
+        )
     }
 }

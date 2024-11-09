@@ -6,6 +6,7 @@ import ru.topbun.domain.entity.recipe.RecipeEntity
 data class DetailRecipeState(
     val tabs:List<DetailRecipeTabs> = DetailRecipeTabs.entries,
     val selectedTabIndex: Int = 0,
+    val showModalCategories: Boolean = false,
     val screenState: DetailRecipeScreenState = DetailRecipeScreenState.Loading
 ){
 

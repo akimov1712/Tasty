@@ -23,6 +23,7 @@ class DetailRecipeViewModel(
         loadRecipe()
     }
 
+
     fun loadRecipe() = screenModelScope.launch {
         wrapperException({
             updateState { copy(screenState = Loading) }
@@ -47,5 +48,9 @@ class DetailRecipeViewModel(
             updateState { copy(screenState = Error(msg)) }
         }
     }
+
+
+    fun showCategoriesModal() = updateState { copy(showModalCategories = true) }
+    fun hideCategoriesModal() = updateState { copy(showModalCategories = false) }
 
 }
