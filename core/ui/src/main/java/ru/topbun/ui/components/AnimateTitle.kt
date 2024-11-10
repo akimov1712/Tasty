@@ -14,7 +14,7 @@ import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
 
 @Composable
-fun AnimateTitle(text: String, isTitleVisible: Boolean) {
+fun AnimateTitle(text: String, isTitleVisible: Boolean = true) {
     Column(
         modifier = Modifier.animateContentSize()
                 then if (!isTitleVisible) Modifier.height(0.dp) else Modifier.wrapContentHeight()

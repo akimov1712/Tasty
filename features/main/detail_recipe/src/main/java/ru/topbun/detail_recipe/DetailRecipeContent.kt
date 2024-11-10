@@ -87,7 +87,6 @@ data class DetailRecipeScreen(val recipeId: Int) : Screen {
         ) {
             val koin = getKoin()
             val viewModel = rememberScreenModel { koin.get<DetailRecipeViewModel> { parametersOf(recipeId) } }
-            val mainNavigator = koinScreenModel<MainScreenNavigator>()
             val state by viewModel.state.collectAsState()
             val screenState = state.screenState
             Column(
@@ -308,7 +307,7 @@ private fun CategoriesModal(
             .fillMaxWidth()
             .padding(horizontal = 32.dp)
             .background(color = Colors.WHITE, RoundedCornerShape(12.dp))
-            .padding(horizontal = 32.dp, vertical = 18.dp),
+            .padding(16.dp),
         onDismissDialog = onDismiss
     ) {
         LazyColumn(

@@ -6,7 +6,7 @@ enum class DifficultyType {
     override fun toString(): String {
         return when(this){
             Easy -> "Легко"
-            Medium -> "Нормально"
+            Medium -> "Средне"
             Hard -> "Сложно"
         }
     }}
