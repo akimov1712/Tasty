@@ -11,7 +11,7 @@ data class RecipeEntity(
     val isFavorite: Boolean,
     val categories: List<CategoryEntity>,
     val timeCooking: Int?,
-    val difficulty: DifficultyType,
+    val difficulty: DifficultyType?,
     val carbs: Int?,
     val fat: Int?,
     val protein: Int?,

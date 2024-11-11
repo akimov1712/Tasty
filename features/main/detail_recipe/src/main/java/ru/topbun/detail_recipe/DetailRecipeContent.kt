@@ -1,5 +1,6 @@
 package ru.topbun.detail_recipe
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -24,14 +25,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -41,10 +45,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
@@ -85,6 +92,7 @@ data class DetailRecipeScreen(val recipeId: Int) : Screen {
             modifier = Modifier
                 .fillMaxSize(), contentAlignment = Alignment.Center
         ) {
+            val context = LocalContext.current
             val koin = getKoin()
             val viewModel = rememberScreenModel { koin.get<DetailRecipeViewModel> { parametersOf(recipeId) } }
             val state by viewModel.state.collectAsState()
@@ -94,11 +102,7 @@ data class DetailRecipeScreen(val recipeId: Int) : Screen {
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                Header(state) {
-                    if (screenState is Success) {
-                        viewModel.changeFavorite(!screenState.recipe.isFavorite)
-                    }
-                }
+                Header(state,viewModel)
                 if(screenState is Success) {
                     Body(state, screenState.recipe, viewModel){
 
@@ -111,6 +115,15 @@ data class DetailRecipeScreen(val recipeId: Int) : Screen {
                     viewModel.loadRecipe()
                 }
                 Loading -> CircularProgressIndicator(color = Colors.BLUE)
+                else -> {}
+            }
+            when (state.deleteState) {
+
+                DetailRecipeState.DeleteRecipeState.Success -> {
+                    LaunchedEffect(state.deleteState) {
+                        Toast.makeText(context, "Рецепт удален", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 else -> {}
             }
         }
@@ -128,6 +141,12 @@ data class DetailRecipeScreen(val recipeId: Int) : Screen {
                 categories = recipe.categories,
                 onDismiss = { viewModel.hideCategoriesModal()},
                 onClickCategory = onClickCategory
+            )
+        }
+        if (state.showModalDeleteRecipe){
+            DialogConfirmDeleteRecipe(
+                onClickDelete = { viewModel.deleteRecipe(recipe.id) },
+                onDismissDialog = { viewModel.hideDeleteRecipeModal() }
             )
         }
         Column(
@@ -222,7 +241,7 @@ fun Table(viewModel: DetailRecipeViewModel, recipe: RecipeEntity) {
             )
             CharactItem(
                 icon = painterResource(id = R.drawable.ic_difficulty),
-                text = recipe.difficulty.toString()
+                text = recipe.difficulty?.toString() ?: "Не указано"
             )
         }
     }
@@ -259,7 +278,7 @@ private fun CharactItem(
 }
 
 @Composable
-private fun Header(state: DetailRecipeState, onClickFavorite: () -> Unit) {
+private fun Header(state: DetailRecipeState, viewModel: DetailRecipeViewModel) {
     val navigator = LocalNavigator.currentOrThrow
     Box(
         modifier = Modifier
@@ -283,15 +302,28 @@ private fun Header(state: DetailRecipeState, onClickFavorite: () -> Unit) {
         ) {
             navigator.pop()
         }
-        AppIconButton(
+        Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(12.dp),
-            icon = if (screenState !is Success) Icons.Outlined.FavoriteBorder else {
-                if (screenState.recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
-            }
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            onClickFavorite()
+            AppIconButton(
+                icon = if (screenState !is Success) Icons.Outlined.FavoriteBorder else {
+                    if (screenState.recipe.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder
+                }
+            ) {
+                if (screenState is Success) {
+                    viewModel.changeFavorite(!screenState.recipe.isFavorite)
+                }
+            }
+            if (state.showButtonDeleteRecipe){
+                AppIconButton(
+                    icon = Icons.Filled.Delete
+                ) {
+                    viewModel.showDeleteRecipeModal()
+                }
+            }
         }
     }
 }
@@ -352,5 +384,52 @@ private fun CategoriesDialogItem(category: CategoryEntity, onClick: (CategoryEnt
             style = Typography.Title2,
             color = Colors.BLACK
         )
+    }
+}
+
+@Composable
+fun DialogConfirmDeleteRecipe(
+    onClickDelete: () -> Unit,
+    onDismissDialog: () -> Unit
+) {
+    DialogWrapper(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+            .background(color = Colors.WHITE, RoundedCornerShape(12.dp))
+            .padding(20.dp),
+        onDismissDialog = onDismissDialog
+    ) {
+        Text(
+            text = "Вы уверены, что хотите удалить рецепт?",
+            color = Colors.BLACK,
+            style = Typography.Title1.copy(fontSize = 22.sp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier.align(Alignment.End)
+        ){
+            TextButton(
+                onClick = onDismissDialog,
+            ) {
+                Text(
+                    text = "Отмена",
+                    style = Typography.Title2,
+                    color = Colors.BLUE
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            TextButton(
+                onClick = onClickDelete,
+                colors = ButtonDefaults.textButtonColors(contentColor = Colors.RED)
+            ) {
+                Text(
+                    text = "Удалить",
+                    style = Typography.Title2,
+                    color = Colors.RED
+
+                )
+            }
+        }
     }
 }

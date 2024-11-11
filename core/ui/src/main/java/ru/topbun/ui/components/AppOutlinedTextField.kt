@@ -25,7 +25,7 @@ import ru.topbun.ui.Typography
 fun AppOutlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier.defaultMinSize(minHeight = 42.dp).fillMaxWidth(),
+    modifier: Modifier = Modifier.defaultMinSize(minHeight = 40.dp).fillMaxWidth(),
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = Typography.Placeholder1,

@@ -33,6 +33,7 @@ import ru.topbun.navigation.main.MainScreenProvider
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
 import ru.topbun.ui.components.AnimateTitle
+import ru.topbun.ui.components.ErrorComponent
 import ru.topbun.ui.components.RecipeItem
 
 data object FavoriteScreen: Screen {
@@ -78,6 +79,13 @@ private fun ColumnScope.FavoriteList(viewModel: FavoriteViewModel, onClickRecipe
                 LaunchedEffect(state.favoriteState) {
                     Toast.makeText(context, screenState.msg, Toast.LENGTH_SHORT).show()
                 }
+            }
+            else -> {}
+        }
+
+        when(val recipeScreenState = state.recipeState){
+            is FavoriteState.RecipeScreenState.Error -> ErrorComponent(text = recipeScreenState.msg) {
+                viewModel.loadRecipes()
             }
             else -> {}
         }

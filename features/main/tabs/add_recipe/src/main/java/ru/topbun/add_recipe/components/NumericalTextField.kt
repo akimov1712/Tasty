@@ -21,8 +21,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import ru.topbun.add_recipe.R
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
 import ru.topbun.ui.components.AppOutlinedTextField
@@ -32,10 +30,10 @@ fun NumericalTextField(
     title: String,
     placeholderText: String,
     value: String,
-    isLoading: Boolean,
+    isLoading: Boolean = false,
     isImportant: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Number,
-    supportingText: @Composable (() -> Unit)? = null,
+    errorText: String? = null,
     onValueChange: (String) -> Unit,
 ) {
     Column {
@@ -49,7 +47,7 @@ fun NumericalTextField(
                 Text(
                     textAlign = TextAlign.Start,
                     text = title,
-                    color = Colors.GRAY,
+                    color = Colors.GRAY_DARK,
                     style = Typography.General1
                 )
                 if (isImportant) {
@@ -67,7 +65,7 @@ fun NumericalTextField(
             AppOutlinedTextField(
                 modifier = Modifier.weight(1f),
                 value = value,
-                supportingText = supportingText,
+                errorText = errorText,
                 onValueChange = onValueChange,
                 enabled = !isLoading,
                 placeholderText = placeholderText,
@@ -102,7 +100,7 @@ fun NumericalText(
                 textAlign = TextAlign.Start,
                 text = title,
                 color = Colors.BLACK,
-                style = Typography.Placeholder1
+                style = Typography.General1
             )
             Spacer(Modifier.width(20.dp))
             Text(

@@ -17,6 +17,7 @@ import ru.topbun.data.source.network.recipe.dto.FavoriteDTO
 import ru.topbun.data.source.network.recipe.dto.FavoriteReceive
 import ru.topbun.data.source.network.recipe.dto.GetRecipeReceive
 import ru.topbun.data.source.network.recipe.dto.RecipeDTO
+import ru.topbun.tasty.data.source.remote.recipe.dto.UploadDTO
 
 class RecipeRepositoryImpl(
     private val api: RecipeApi,
@@ -60,7 +61,7 @@ class RecipeRepositoryImpl(
         }
 
     override suspend fun uploadImage(image: ByteArray): String = exceptionWrapper {
-            api.uploadImage(image).body()
+            api.uploadImage(image).body<UploadDTO>().url
         }
 
     override suspend fun changeFavorite(recipeId: Int, favorite: Boolean): Boolean = exceptionWrapper {
@@ -73,5 +74,9 @@ class RecipeRepositoryImpl(
 
     override suspend fun getFavoritesRecipes(): List<RecipeEntity> = exceptionWrapper{
         api.getFavoritesRecipe(settings.getToken()).codeResultWrapper().body<List<RecipeDTO>>().toEntity()
+    }
+
+    override suspend fun deleteRecipe(id: Int): Unit = exceptionWrapper {
+        api.deleteRecipe(id, settings.getToken()).codeResultWrapper()
     }
 }

@@ -7,8 +7,17 @@ data class DetailRecipeState(
     val tabs:List<DetailRecipeTabs> = DetailRecipeTabs.entries,
     val selectedTabIndex: Int = 0,
     val showModalCategories: Boolean = false,
-    val screenState: DetailRecipeScreenState = DetailRecipeScreenState.Loading
+    val showModalDeleteRecipe: Boolean = false,
+    val showButtonDeleteRecipe: Boolean = false,
+    val screenState: DetailRecipeScreenState = DetailRecipeScreenState.Loading,
+    val deleteState: DeleteRecipeState = DeleteRecipeState.Initial
 ){
+
+    sealed interface DeleteRecipeState{
+        data object Initial: DeleteRecipeState
+        data object Success: DeleteRecipeState
+
+    }
 
     sealed interface DetailRecipeScreenState{
         data object Loading: DetailRecipeScreenState

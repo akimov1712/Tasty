@@ -10,6 +10,7 @@ import ru.topbun.domain.useCases.category.GetCategoriesUseCase
 import ru.topbun.domain.useCases.category.GetCategoriesWithIdUseCase
 import ru.topbun.domain.useCases.recipe.AddRecipeUseCase
 import ru.topbun.domain.useCases.recipe.ChangeFavoriteUseCase
+import ru.topbun.domain.useCases.recipe.DeleteRecipeUseCase
 import ru.topbun.domain.useCases.recipe.GetFavoritesRecipeUseCase
 import ru.topbun.domain.useCases.recipe.GetRecipeUseCase
 import ru.topbun.domain.useCases.recipe.GetRecipeWithCategoryUseCase
@@ -87,6 +88,11 @@ val useCasesModule = module {
     }
     single<GetFavoritesRecipeUseCase> {
         GetFavoritesRecipeUseCase(
+            get()
+        )
+    }
+    single<DeleteRecipeUseCase> {
+        DeleteRecipeUseCase(
             get()
         )
     }

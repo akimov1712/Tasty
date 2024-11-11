@@ -17,7 +17,7 @@ data class RecipeDTO(
     @SerialName("isFavorite") val isFavorite: Boolean,
     @SerialName("categories") val categories: List<CategoryDTO>,
     @SerialName("timeCooking") val timeCooking: Int?,
-    @SerialName("difficulty") val difficulty: DifficultyType,
+    @SerialName("difficulty") val difficulty: DifficultyType?,
     @SerialName("carbs") val carbs: Int?,
     @SerialName("fat") val fat: Int?,
     @SerialName("protein") val protein: Int?,

@@ -10,7 +10,7 @@ fun Int.toIngredients(): String{
 }
 
 fun Int?.convertCookingTime(): String {
-    if (this == null) return "Неизвестно"
+    if (this == null) return "Не указано"
     val days = this / (24 * 60)
     val hours = (this % (24 * 60)) / 60
     val remainingMinutes = this % 60

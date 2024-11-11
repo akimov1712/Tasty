@@ -11,5 +11,6 @@ interface RecipeRepository {
     suspend fun uploadImage(image: ByteArray): String
     suspend fun changeFavorite(recipeId: Int, isFavorite: Boolean): Boolean
     suspend fun getFavoritesRecipes(): List<RecipeEntity>
+    suspend fun deleteRecipe(id: Int)
 
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.topbun.common.calculateKcal
 import ru.topbun.domain.entity.recipe.IngredientsEntity
 import ru.topbun.domain.entity.recipe.RecipeEntity
 import ru.topbun.ui.Colors
@@ -65,7 +66,9 @@ private fun Ingredients(recipe: RecipeEntity) {
 @Composable
 private fun IngredientItem(ingr: IngredientsEntity) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -108,7 +111,8 @@ private fun Description(recipe: RecipeEntity) {
 private fun Nutrients(recipe: RecipeEntity) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         val totalNutrients = recipe.getSumNutrients()
         NutrientItem(
@@ -130,6 +134,30 @@ private fun Nutrients(recipe: RecipeEntity) {
             value = recipe.fat?.toString() ?: "Не указан",
             title = "Жиры",
             color = Color(0xffF15151)
+        )
+        KcalNutrients(recipe)
+    }
+}
+
+@Composable
+private fun KcalNutrients(recipe: RecipeEntity) {
+    Column {
+        Text(
+            text = "Ккал",
+            color = Colors.BLUE_GRAY,
+            style = Typography.General1,
+            fontSize = 15.sp,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = calculateKcal(
+                recipe.protein?.toFloat(),
+                recipe.carbs?.toFloat(),
+                recipe.fat?.toFloat()
+            )?.toString() ?: "Не указано",
+            style = Typography.Option1,
+            color = Colors.BLACK,
+            fontSize = 16.sp
         )
     }
 }

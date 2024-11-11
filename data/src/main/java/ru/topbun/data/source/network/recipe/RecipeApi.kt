@@ -1,5 +1,6 @@
 package ru.topbun.data.source.network.recipe
 
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.InputProvider
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
@@ -34,6 +35,10 @@ class RecipeApi(private val api: ApiFactory) {
     }
 
     suspend fun getRecipesWithId(id: Int, token: String) = api.client.post("/recipe/$id"){
+        token(token)
+    }
+
+    suspend fun deleteRecipe(id: Int, token: String) = api.client.delete("/recipe/$id"){
         token(token)
     }
 
