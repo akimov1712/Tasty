@@ -28,6 +28,7 @@ import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import ru.topbun.domain.entity.recipe.RecipeEntity
+import ru.topbun.domain.entity.recipe.RecipeTabs
 import ru.topbun.navigation.main.MainScreenNavigator
 import ru.topbun.navigation.main.MainScreenProvider
 import ru.topbun.recipes.RecipeState.RecipeScreenState
@@ -68,7 +69,7 @@ data object RecipesScreen : Screen {
             ) { viewModel.changeTab(it) }
             Spacer(modifier = Modifier.height(10.dp))
             RecipeList(viewModel){
-                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it.id))
+                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it.id, state.tabs[state.selectedTabIndex] == RecipeTabs.SaveRecipes))
                 mainNavigator.pushScreen(detailRecipeScreen)
             }
             when(val screenState = state.favoriteState){

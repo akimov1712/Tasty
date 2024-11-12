@@ -8,6 +8,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
@@ -17,14 +18,16 @@ fun AppButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     loading: Boolean = false,
+    containerColor: Color = Colors.BLUE,
+    contentColor: Color = Colors.WHITE,
     text: String,
     onClick: () -> Unit
 ) {
     Button(
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Colors.BLUE,
-            disabledContainerColor = Colors.BLUE.copy(0.65f)
+            containerColor = containerColor,
+            disabledContainerColor = containerColor.copy(0.65f)
         ),
         enabled = enabled || loading,
         shape = RoundedCornerShape(8.dp),
@@ -38,7 +41,7 @@ fun AppButton(
             Text(
                 text = text,
                 style = Typography.Title2,
-                color = Colors.WHITE
+                color = contentColor
             )
         }
 

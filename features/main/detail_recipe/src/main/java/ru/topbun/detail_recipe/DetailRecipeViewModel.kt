@@ -9,40 +9,64 @@ import ru.topbun.android.wrapperException
 import ru.topbun.detail_recipe.DetailRecipeState.DetailRecipeScreenState
 import ru.topbun.detail_recipe.DetailRecipeState.DetailRecipeScreenState.*
 import ru.topbun.domain.entity.recipe.RecipeEntity
+import ru.topbun.domain.entity.recipe.RecipeTabs
 import ru.topbun.domain.useCases.auth.GetAccountInfoUseCase
 import ru.topbun.domain.useCases.recipe.ChangeFavoriteUseCase
 import ru.topbun.domain.useCases.recipe.DeleteRecipeUseCase
 import ru.topbun.domain.useCases.recipe.GetRecipeWithIdUseCase
+import ru.topbun.domain.useCases.recipe.RecipeLocalExistsUseCase
+import ru.topbun.domain.useCases.recipe.SaveRecipeUseCase
 
 class DetailRecipeViewModel(
     private val recipesId: Int,
+    private val fromCache: Boolean,
     private val changeFavoriteUseCase: ChangeFavoriteUseCase,
     private val getRecipeWithIdUseCase: GetRecipeWithIdUseCase,
     private val getAccountInfoUseCase: GetAccountInfoUseCase,
-    private val deleteRecipeUseCase: DeleteRecipeUseCase
+    private val deleteRecipeUseCase: DeleteRecipeUseCase,
+    private val saveRecipeUseCase: SaveRecipeUseCase,
+    private val recipeLocalExistsUseCase: RecipeLocalExistsUseCase,
 ): ScreenModelState<DetailRecipeState>(DetailRecipeState()) {
 
     fun changeTabIndex(index: Int) = updateState { copy(selectedTabIndex = index) }
 
     init {
         loadRecipe()
+        checkExistsOnLocal()
     }
 
-    fun deleteRecipe(id: Int) = screenModelScope.launch {
+    fun saveRecipe(recipe: RecipeEntity) = screenModelScope.launch {
+        saveRecipeUseCase(recipe)
+        updateState { copy(buttonSaveIsSave = false, saveLocalRecipeState = DetailRecipeState.LocalRecipeState.Saved) }
+    }
+
+    private fun checkExistsOnLocal() = screenModelScope.launch{
+        val status = recipeLocalExistsUseCase(recipesId)
+        updateState { copy(buttonSaveIsSave = !status) }
+    }
+
+    fun deleteRecipe(id: Int, fromCache: Boolean = false) = screenModelScope.launch {
         wrapperException({
-            deleteRecipeUseCase(id)
-            updateState { copy(
-                deleteState = DetailRecipeState.DeleteRecipeState.Success,
-                showModalDeleteRecipe = false,
-                showButtonDeleteRecipe = false
-            ) }
+            deleteRecipeUseCase(id, fromCache)
+            if (fromCache){
+                updateState { copy(
+                    buttonSaveIsSave = true,
+                    saveLocalRecipeState = DetailRecipeState.LocalRecipeState.Delete
+                ) }
+            } else {
+                updateState { copy(
+                    deleteState = DetailRecipeState.DeleteRecipeState.Success,
+                    showModalDeleteRecipe = false,
+                    showButtonDeleteRecipe = false
+                ) }
+            }
         }){ _, msg -> }
     }
 
     fun loadRecipe() = screenModelScope.launch {
         wrapperException({
             updateState { copy(screenState = Loading) }
-            val recipe = getRecipeWithIdUseCase(recipesId)
+            val recipe = getRecipeWithIdUseCase(recipesId, fromCache)
             updateState { copy(screenState = Success(recipe)) }
             recipe.userId?.let { changeVisibleDeleteButton(it) }
         }){ _, msg ->

@@ -57,7 +57,7 @@ data object FavoriteScreen: Screen {
             )
             Spacer(modifier = Modifier.height(10.dp))
             FavoriteList(viewModel) {
-                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it.id))
+                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it.id, false))
                 mainNavigator.pushScreen(detailRecipeScreen)
             }
         }

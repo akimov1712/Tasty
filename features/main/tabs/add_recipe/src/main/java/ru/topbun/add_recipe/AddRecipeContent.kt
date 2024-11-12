@@ -89,11 +89,12 @@ data object AddRecipeScreen: Screen{
             IngredientsContent(viewModel)
             Spacer(modifier = Modifier.height(20.dp))
             StepsContent(viewModel)
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             AppButton(
                 modifier = Modifier.fillMaxWidth().height(48.dp),
                 text = "Добавить рецепт",
-                loading = state.screenState is AddRecipeState.AddRecipeScreenState.Loading
+                loading = state.screenState is AddRecipeState.AddRecipeScreenState.Loading,
+                enabled = state.screenState !is AddRecipeState.AddRecipeScreenState.Loading
             ) {
                 viewModel.addRecipe()
             }

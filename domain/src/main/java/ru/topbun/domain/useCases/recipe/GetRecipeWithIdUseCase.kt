@@ -6,6 +6,6 @@ class GetRecipeWithIdUseCase(
     private val repository: ru.topbun.domain.repository.recipe.RecipeRepository
 ) {
 
-    suspend operator fun invoke(id: Int) = repository.getRecipesWithId(id)
+    suspend operator fun invoke(id: Int, fromCache: Boolean = false) = repository.getRecipesWithId(id, fromCache)
 
 }

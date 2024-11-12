@@ -12,5 +12,5 @@ import ru.topbun.domain.repository.recipe.RecipeRepository
 val repositoryModule = module {
     single<AuthRepository>{ AuthRepositoryImpl(get(), get()) }
     single<CategoryRepository>{ CategoryRepositoryImpl(get()) }
-    single<RecipeRepository>{ RecipeRepositoryImpl(get(), get()) }
+    single<RecipeRepository>{ RecipeRepositoryImpl(get(), get(), get()) }
 }

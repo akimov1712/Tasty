@@ -45,7 +45,7 @@ class RecipeViewModel(
                 updateState { copy(recipeState = Loading) }
                 val result = getRecipeUseCase(
                     q = stateValue.searchQuery,
-                    isMyRecipe = stateValue.tabs[stateValue.selectedTabIndex] == RecipeTabs.MyRecipes,
+                    type = stateValue.tabs[stateValue.selectedTabIndex],
                     offset = stateValue.recipes.size,
                 )
                 if (result.isEmpty()) updateState { copy(isEndList = true) }

@@ -3,6 +3,7 @@ package ru.topbun.recipes
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import ru.topbun.domain.entity.recipe.RecipeEntity
+import ru.topbun.domain.entity.recipe.RecipeTabs
 
 data class RecipeState(
     val searchQuery: String = "",

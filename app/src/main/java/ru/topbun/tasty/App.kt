@@ -37,7 +37,7 @@ class App: Application() {
                 AuthScreen
             }
             register<MainScreenProvider.DetailRecipe> { provider ->
-                DetailRecipeScreen(provider.recipeId)
+                DetailRecipeScreen(provider.recipeId, provider.fromCache)
             }
             register<MainScreenProvider.RecipeByCategory> { provider ->
                 RecipeByCategoryScreen(provider.category)

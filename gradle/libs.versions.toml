@@ -20,6 +20,7 @@ lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.3"
 composeBom = "2024.04.01"
 logbackClassic = "1.5.6"
+roomRuntime = "2.4.2"
 slf4jAndroid = "1.7.36"
 voyagerVersion = "1.1.0-beta02"
 ksp = "2.0.21-1.0.25"
@@ -33,6 +34,11 @@ runtimeAndroid = "1.7.4"
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-datastore-preferences2 = { module = "androidx.datastore:datastore-preferences", version.ref = "androidxDatastorePreferencesVersion" }
+
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 compose = { module = "com.github.bumptech.glide:compose", version.ref = "compose" }

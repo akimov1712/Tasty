@@ -70,7 +70,7 @@ data class RecipeByCategoryScreen(val category: CategoryEntity): Screen{
             Header(category.name)
             Spacer(modifier = Modifier.height(24.dp))
             RecipeList(viewModel){
-                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it.id))
+                val detailRecipeScreen =  ScreenRegistry.get(MainScreenProvider.DetailRecipe(it.id, false))
                 mainNavigator.pushScreen(detailRecipeScreen)
             }
 

@@ -27,6 +27,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -84,7 +85,7 @@ import ru.topbun.ui.components.ErrorComponent
 import ru.topbun.ui.util.noRippleClickable
 import ru.topbun.ui.util.rippleClickable
 
-data class DetailRecipeScreen(val recipeId: Int) : Screen {
+data class DetailRecipeScreen(val recipeId: Int, val fromCache: Boolean) : Screen {
 
     @Composable
     override fun Content() {
@@ -94,7 +95,7 @@ data class DetailRecipeScreen(val recipeId: Int) : Screen {
         ) {
             val context = LocalContext.current
             val koin = getKoin()
-            val viewModel = rememberScreenModel { koin.get<DetailRecipeViewModel> { parametersOf(recipeId) } }
+            val viewModel = rememberScreenModel { koin.get<DetailRecipeViewModel> { parametersOf(recipeId, fromCache) } }
             val state by viewModel.state.collectAsState()
             val screenState = state.screenState
             Column(
@@ -317,11 +318,24 @@ private fun Header(state: DetailRecipeState, viewModel: DetailRecipeViewModel) {
                     viewModel.changeFavorite(!screenState.recipe.isFavorite)
                 }
             }
-            if (state.showButtonDeleteRecipe){
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                if (state.showButtonDeleteRecipe){
+                    AppIconButton(
+                        icon = Icons.Filled.Delete
+                    ) {
+                        viewModel.showDeleteRecipeModal()
+                    }
+                }
                 AppIconButton(
-                    icon = Icons.Filled.Delete
+                    icon = painterResource(if (state.buttonSaveIsSave) R.drawable.ic_download else R.drawable.ic_close)
                 ) {
-                    viewModel.showDeleteRecipeModal()
+                    if((screenState is Success)){
+                        if(state.buttonSaveIsSave){
+                            viewModel.saveRecipe(screenState.recipe)
+                        } else {
+                            viewModel.deleteRecipe(screenState.recipe.id, true)
+                        }
+                    }
                 }
             }
         }

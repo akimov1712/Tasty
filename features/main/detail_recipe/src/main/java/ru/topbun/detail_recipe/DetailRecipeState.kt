@@ -9,9 +9,17 @@ data class DetailRecipeState(
     val showModalCategories: Boolean = false,
     val showModalDeleteRecipe: Boolean = false,
     val showButtonDeleteRecipe: Boolean = false,
+    val buttonSaveIsSave: Boolean = false,
     val screenState: DetailRecipeScreenState = DetailRecipeScreenState.Loading,
-    val deleteState: DeleteRecipeState = DeleteRecipeState.Initial
+    val deleteState: DeleteRecipeState = DeleteRecipeState.Initial,
+    val saveLocalRecipeState: LocalRecipeState = LocalRecipeState.Initial
 ){
+
+    sealed interface LocalRecipeState{
+        data object Initial: LocalRecipeState
+        data object Delete: LocalRecipeState
+        data object Saved: LocalRecipeState
+    }
 
     sealed interface DeleteRecipeState{
         data object Initial: DeleteRecipeState
