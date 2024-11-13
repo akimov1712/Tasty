@@ -441,7 +441,6 @@ fun DialogConfirmDeleteRecipe(
                     text = "Удалить",
                     style = Typography.Title2,
                     color = Colors.RED
-
                 )
             }
         }

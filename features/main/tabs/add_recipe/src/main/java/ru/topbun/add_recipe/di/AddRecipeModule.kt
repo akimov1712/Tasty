@@ -4,5 +4,5 @@ import org.koin.dsl.module
 import ru.topbun.add_recipe.AddRecipeViewModel
 
 val addRecipeModule = module {
-    single { AddRecipeViewModel(get(), get(), get()) }
+    single { AddRecipeViewModel(get(), get(), get(), get()) }
 }

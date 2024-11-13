@@ -1,52 +1,30 @@
 package ru.topbun.add_recipe
 
-import android.net.Uri
 import android.widget.Toast
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
-import coil.compose.rememberAsyncImagePainter
 import ru.topbun.add_recipe.components.IngredientsContent
 import ru.topbun.add_recipe.components.NumericalDropMenuContent
 import ru.topbun.add_recipe.components.NumericalText
@@ -56,13 +34,11 @@ import ru.topbun.common.isNumber
 import ru.topbun.common.toStringOrBlank
 import ru.topbun.domain.entity.recipe.DifficultyType
 import ru.topbun.ui.Colors
-import ru.topbun.ui.R
 import ru.topbun.ui.Typography
 import ru.topbun.ui.components.AnimateTitle
 import ru.topbun.ui.components.AppButton
 import ru.topbun.ui.components.AppOutlinedTextField
 import ru.topbun.ui.components.ChoiceImage
-import ru.topbun.ui.util.rippleClickable
 
 
 data object AddRecipeScreen: Screen{
@@ -80,10 +56,12 @@ data object AddRecipeScreen: Screen{
             val state by viewModel.state.collectAsState()
             AnimateTitle(text = "Добавить рецепт")
             Details(viewModel, false)
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 20.dp)
-                .height(1.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp)
+                    .height(1.dp)
+            )
             NumericalContent(viewModel)
             Spacer(modifier = Modifier.height(20.dp))
             IngredientsContent(viewModel)
@@ -91,7 +69,9 @@ data object AddRecipeScreen: Screen{
             StepsContent(viewModel)
             Spacer(modifier = Modifier.height(40.dp))
             AppButton(
-                modifier = Modifier.fillMaxWidth().height(48.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
                 text = "Добавить рецепт",
                 loading = state.screenState is AddRecipeState.AddRecipeScreenState.Loading,
                 enabled = state.screenState !is AddRecipeState.AddRecipeScreenState.Loading
@@ -99,9 +79,16 @@ data object AddRecipeScreen: Screen{
                 viewModel.addRecipe()
             }
             LaunchedEffect(state.screenState) {
-                when(val screenState = state.screenState){
-                    is AddRecipeState.AddRecipeScreenState.Error -> Toast.makeText(context, screenState.msg, Toast.LENGTH_SHORT).show()
-                    AddRecipeState.AddRecipeScreenState.Success -> Toast.makeText(context, "Рецепт добавлен успешно", Toast.LENGTH_SHORT).show()
+                when (val screenState = state.screenState) {
+                    is AddRecipeState.AddRecipeScreenState.Error -> {
+                        Toast.makeText(context, screenState.msg, Toast.LENGTH_SHORT).show()
+                    }
+
+                    AddRecipeState.AddRecipeScreenState.Success -> {
+                            Toast.makeText(context, "Рецепт добавлен успешно", Toast.LENGTH_SHORT)
+                                .show()
+                    }
+
                     else -> {}
                 }
             }

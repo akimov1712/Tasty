@@ -50,6 +50,7 @@ import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
 import ru.topbun.ui.components.AnimateTitle
 import ru.topbun.ui.components.CategoryItem
+import ru.topbun.ui.components.ErrorComponent
 import ru.topbun.ui.components.ImagePlaceholder
 import ru.topbun.ui.components.SearchTextField
 
@@ -58,26 +59,34 @@ data object CategoryScreen: Screen {
     @Composable
     override fun Content() {
         val mainNavigator = koinScreenModel<MainScreenNavigator>()
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 12.dp, top = 24.dp, end = 12.dp)
-        ) {
+        Box(contentAlignment = Alignment.Center){
             val viewModel = koinScreenModel<CategoryViewModel>()
             val state by viewModel.state.collectAsState()
-            AnimateTitle(
-                text = "Категории",
-                isTitleVisible = state.lazyListState.firstVisibleItemIndex == 0
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 12.dp, top = 24.dp, end = 12.dp)
+            ) {
+                AnimateTitle(
+                    text = "Категории",
+                    isTitleVisible = state.lazyListState.firstVisibleItemIndex == 0
+                )
 
-            SearchTextField(
-                value = state.searchQuery,
-                onValueChange = { if (it.trim().length <= 64) viewModel.changeQuery(it) }
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            CategoryList(viewModel){
-                val recipeByCategoryScreen =  ScreenRegistry.get(MainScreenProvider.RecipeByCategory(it))
-                mainNavigator.pushScreen(recipeByCategoryScreen)
+                SearchTextField(
+                    value = state.searchQuery,
+                    onValueChange = { if (it.trim().length <= 64) viewModel.changeQuery(it) }
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                CategoryList(viewModel){
+                    val recipeByCategoryScreen =  ScreenRegistry.get(MainScreenProvider.RecipeByCategory(it))
+                    mainNavigator.pushScreen(recipeByCategoryScreen)
+                }
+            }
+            when(val screenState = state.categoryState){
+                is CategoryScreenState.Error -> ErrorComponent(text = screenState.msg) {
+                    viewModel.loadCategories()
+                }
+                else -> {}
             }
         }
     }

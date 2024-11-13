@@ -28,7 +28,7 @@ class FavoriteViewModel(
             updateState {
                 val newRecipes = recipes.toMutableList()
                 newRecipes.replaceAll {
-                    if (it.id == recipeId)it.copy(isFavorite = favorite)
+                    if (it.id == recipeId) it.copy(isFavorite = favorite)
                     else it
                 }
                 copy(recipes = newRecipes)

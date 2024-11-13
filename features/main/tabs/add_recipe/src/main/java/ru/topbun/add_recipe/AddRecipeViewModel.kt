@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import ru.topbun.add_recipe.AddRecipeState.AddRecipeScreenState
 import ru.topbun.add_recipe.AddRecipeState.AddRecipeScreenState.Error
@@ -15,18 +17,21 @@ import ru.topbun.domain.entity.recipe.DifficultyType
 import ru.topbun.domain.entity.recipe.IngredientsEntity
 import ru.topbun.domain.entity.recipe.RecipeEntity
 import ru.topbun.domain.entity.recipe.StepEntity
+import ru.topbun.domain.useCases.auth.CheckExistsTokenUseCase
 import ru.topbun.domain.useCases.recipe.AddRecipeUseCase
 import ru.topbun.domain.useCases.recipe.UploadImageUseCase
 
 class AddRecipeViewModel(
     private val context: Context,
     private val uploadImageUseCase: UploadImageUseCase,
-    private val addRecipeUseCase: AddRecipeUseCase
+    private val addRecipeUseCase: AddRecipeUseCase,
+    private val checkTokenExists: CheckExistsTokenUseCase
 ): ScreenModelState<AddRecipeState>(AddRecipeState()){
 
     fun addRecipe() = screenModelScope.launch {
         wrapperException({
             updateState { copy(screenState = AddRecipeScreenState.Loading) }
+            checkTokenExists()
             if(stateValue.imageUri == null) {
                 updateState { copy(screenState = Error("Установите обложку для рецепта")) }
                 return@wrapperException
@@ -46,16 +51,28 @@ class AddRecipeViewModel(
                 return@wrapperException
             }
 
-            val previewImageLink = uploadImageUseCase(previewCompress).resolve()
 
             val ingredients = stateValue.ingredients.filter { it.value.isNotEmpty() && it.name.isNotEmpty() }
-            val steps = stateValue.steps.filter { it.text.isNotEmpty()}.map { step ->
-                if (step.preview != null){
-                    val imageCompress = compressImageUriToByteArray(context, Uri.parse(step.preview)) ?: return@map step
-                    val linkImage = uploadImageUseCase(imageCompress).resolve()
-                    step.copy(preview = linkImage)
-                } else step
+            if (ingredients.isEmpty()){
+                updateState { copy(screenState = Error("Укажите ингредиенты")) }
+                return@wrapperException
             }
+
+            val steps = stateValue.steps.filter { it.text.isNotEmpty()}.map { step ->
+                async {
+                    if (step.preview != null){
+                        val imageCompress = compressImageUriToByteArray(context, Uri.parse(step.preview)) ?: return@async step
+                        val linkImage = uploadImageUseCase(imageCompress).resolve()
+                        step.copy(preview = linkImage)
+                    } else step
+                }
+            }.awaitAll()
+            if (steps.isEmpty()){
+                updateState { copy(screenState = Error("Укажите шаги приготовления")) }
+                return@wrapperException
+            }
+
+            val previewImageLink = uploadImageUseCase(previewCompress).resolve()
 
             val recipe = RecipeEntity(
                 id = 0,
