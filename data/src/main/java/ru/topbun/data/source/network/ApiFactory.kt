@@ -18,7 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import ru.topbun.common.Const.BASE_URL
+import ru.topbun.data.BuildConfig.BASE_URL
 import ru.topbun.data.source.local.dataStore.Settings
 import ru.topbun.data.source.local.dataStore.getToken
 import ru.topbun.data.source.network.ApiFactory.Companion.HEADER_AUTH

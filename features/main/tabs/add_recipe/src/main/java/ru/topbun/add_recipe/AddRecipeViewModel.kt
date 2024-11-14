@@ -12,7 +12,6 @@ import ru.topbun.add_recipe.AddRecipeState.AddRecipeScreenState.Error
 import ru.topbun.android.ScreenModelState
 import ru.topbun.android.compressImageUriToByteArray
 import ru.topbun.android.wrapperException
-import ru.topbun.common.resolve
 import ru.topbun.domain.entity.recipe.DifficultyType
 import ru.topbun.domain.entity.recipe.IngredientsEntity
 import ru.topbun.domain.entity.recipe.RecipeEntity
@@ -62,7 +61,7 @@ class AddRecipeViewModel(
                 async {
                     if (step.preview != null){
                         val imageCompress = compressImageUriToByteArray(context, Uri.parse(step.preview)) ?: return@async step
-                        val linkImage = uploadImageUseCase(imageCompress).resolve()
+                        val linkImage = uploadImageUseCase(imageCompress)
                         step.copy(preview = linkImage)
                     } else step
                 }
@@ -72,7 +71,7 @@ class AddRecipeViewModel(
                 return@wrapperException
             }
 
-            val previewImageLink = uploadImageUseCase(previewCompress).resolve()
+            val previewImageLink = uploadImageUseCase(previewCompress)
 
             val recipe = RecipeEntity(
                 id = 0,

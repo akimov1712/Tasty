@@ -14,6 +14,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        val url = property("base_url")?.toString() ?: error("Not found base url in properties")
+        buildConfigField("String", "BASE_URL", "\"$url\"")
+
     }
 
     buildTypes {
@@ -24,6 +28,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    buildFeatures {
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

@@ -4,6 +4,7 @@ import io.ktor.client.call.body
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import ru.topbun.android.ClientException
+import ru.topbun.data.BuildConfig
 import ru.topbun.data.codeResultWrapper
 import ru.topbun.data.exceptionWrapper
 import ru.topbun.data.mapper.toDBO
@@ -30,12 +31,18 @@ class RecipeRepositoryImpl(
     private val dao: RecipeDao
 ): RecipeRepository {
 
+    fun String.resolve() = "${BuildConfig.BASE_URL}/$this"
+
     override suspend fun addRecipe(recipe: RecipeEntity): RecipeEntity = exceptionWrapper {
-            api.addRecipe(
-                recipe = recipe.toDTO(),
-                token = settings.getToken()
-            ).codeResultWrapper().body<RecipeDTO>().toEntity()
-        }
+        val newRecipe = recipe.copy(
+            image = recipe.image?.resolve(),
+            steps = recipe.steps.map { it.copy(preview = it.preview?.resolve()) }
+        )
+        api.addRecipe(
+            recipe = newRecipe.toDTO(),
+            token = settings.getToken()
+        ).codeResultWrapper().body<RecipeDTO>().toEntity()
+    }
 
     override suspend fun getRecipes(q: String, offset: Int, limit: Int, type: RecipeTabs): List<RecipeEntity> = exceptionWrapper {
             val data = GetRecipeReceive(q.trim(), offset, limit)
