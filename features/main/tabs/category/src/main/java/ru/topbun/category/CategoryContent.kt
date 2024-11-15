@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -104,7 +105,7 @@ private fun ColumnScope.CategoryList(viewModel: CategoryViewModel, onClickCatego
     ) {
         if (state.categories.isEmpty()) {
             if (state.categoryState == CategoryScreenState.Loading) {
-                CircularProgressIndicator(color = Colors.BLUE)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
             if (state.categoryState == CategoryScreenState.Success) {
                 Text(text = "Пусто", style = Typography.Title3)
@@ -143,7 +144,7 @@ private fun PaginationLoader(viewModel: CategoryViewModel, state: CategoryState)
                     .padding(16.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                CircularProgressIndicator(color = Colors.BLUE)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         }
     }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
@@ -47,7 +48,7 @@ fun AppOutlinedTextField(
     errorText: String? = null,
     shape: Shape = RoundedCornerShape(13.dp),
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
-            cursorColor = Colors.BLUE,
+            cursorColor = MaterialTheme.colorScheme.primary,
             focusedBorderColor = Colors.GRAY,
             unfocusedBorderColor = Colors.GRAY,
             errorBorderColor = Colors.RED,

@@ -11,6 +11,8 @@ object Colors {
     val GRAY_DARK = Color(0xff666666)
     val BLUE_GRAY = Color(0xff9D9DAE)
     val BLUE = Color(0xff3578FF)
+    val APP_PURPLE = Color(0xFF7F5BFC)
+    val APP_RED = Color(0xFFF02C6A)
     val RED = Color(0xffFF271A)
 
 }

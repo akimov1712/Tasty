@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -92,7 +93,7 @@ private fun ColumnScope.FavoriteList(viewModel: FavoriteViewModel, onClickRecipe
 
         if (state.recipes.isEmpty()) {
             if (state.recipeState == FavoriteState.RecipeScreenState.Loading) {
-                CircularProgressIndicator(color = Colors.BLUE)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
             if (state.recipeState == FavoriteState.RecipeScreenState.Success) {
                 Text(text = "Пусто", style = Typography.Title3)

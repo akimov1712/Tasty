@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -101,7 +102,7 @@ private fun ColumnScope.RecipeList(viewModel: RecipeByCategoryViewModel, onClick
 
         if (state.recipes.isEmpty()) {
             if (state.recipeState == Loading) {
-                CircularProgressIndicator(color = Colors.BLUE)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
             if (state.recipeState == Success) {
                 Text(text = "Пусто", style = Typography.Title3)
@@ -147,7 +148,7 @@ private fun PaginationLoader(viewModel: RecipeByCategoryViewModel, state: Recipe
                     .padding(16.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                CircularProgressIndicator(color = Colors.BLUE)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         }
     }

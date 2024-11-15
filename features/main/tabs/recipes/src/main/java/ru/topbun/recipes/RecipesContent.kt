@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -98,7 +99,7 @@ private fun ColumnScope.RecipeList(viewModel: RecipeViewModel, onClickRecipe: (R
 
         if (state.recipes.isEmpty()) {
             if (state.recipeState == RecipeScreenState.Loading) {
-                CircularProgressIndicator(color = Colors.BLUE)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
             if (state.recipeState == RecipeScreenState.Success) {
                 Text(text = "Пусто", style = Typography.Title3)
@@ -151,7 +152,7 @@ private fun PaginationLoader(viewModel: RecipeViewModel, state: RecipeState) {
                     .padding(16.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                CircularProgressIndicator(color = Colors.BLUE)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         }
     }

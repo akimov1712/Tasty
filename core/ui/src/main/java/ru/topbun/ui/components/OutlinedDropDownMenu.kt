@@ -2,6 +2,7 @@ package ru.topbun.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,7 +37,7 @@ fun AppOutlinedDropDownMenu(
                 modifier = Modifier.rotate(animateRotate),
                 painter = painterResource(R.drawable.ic_drop_down),
                 contentDescription = null,
-                tint = Colors.BLUE
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     )

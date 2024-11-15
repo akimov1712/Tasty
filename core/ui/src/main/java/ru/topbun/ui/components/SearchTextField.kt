@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -67,7 +68,7 @@ fun SearchTextField(
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Search
                 ),
-                cursorBrush = SolidColor(Colors.BLUE)
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
             )
         }
         if (value.isNotEmpty()){

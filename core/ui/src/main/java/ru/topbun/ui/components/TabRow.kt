@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -40,7 +41,7 @@ fun TabRow(
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         items.forEachIndexed { index, item ->
-            val background = if (selectedIndex == index) Colors.BLUE else Color.Transparent
+            val background = if (selectedIndex == index) MaterialTheme.colorScheme.primary else Color.Transparent
             val textColor = if (selectedIndex == index) Colors.WHITE else Colors.BLUE_GRAY
             Box(
                 modifier = Modifier

@@ -20,7 +20,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Tasty"
-include(":app")
+include(":app_blue")
 include(":domain")
 include(":data")
 include(":core:common")
@@ -37,3 +37,6 @@ include(":features:main:detail_recipe")
 include(":features:main")
 include(":features:main:auth")
 include(":features:main:recipe_by_category")
+
+include(":app_red")
+include(":app_purple")

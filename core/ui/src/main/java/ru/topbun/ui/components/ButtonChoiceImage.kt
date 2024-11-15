@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,7 +67,7 @@ fun ChoiceImage(
             modifier = Modifier.size(72.dp),
             painter = painterResource(R.drawable.ic_send_image),
             contentDescription = null,
-            tint = Colors.BLUE
+            tint = MaterialTheme.colorScheme.primary
         )
     }
 }

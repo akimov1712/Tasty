@@ -33,6 +33,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -115,7 +116,7 @@ data class DetailRecipeScreen(val recipeId: Int, val fromCache: Boolean) : Scree
                 is Error -> ErrorComponent(text = screenState.msg) {
                     viewModel.loadRecipe()
                 }
-                Loading -> CircularProgressIndicator(color = Colors.BLUE)
+                Loading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 else -> {}
             }
             when (state.deleteState) {
@@ -181,7 +182,7 @@ private fun TabRow(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         tabs.forEachIndexed { index, item ->
-            val color = if (selectedIndex == index) Colors.BLUE else Colors.BLUE_GRAY
+            val color = if (selectedIndex == index) MaterialTheme.colorScheme.primary else Colors.BLUE_GRAY
             Text(
                 modifier = Modifier
                     .noRippleClickable {
@@ -372,7 +373,7 @@ private fun CategoriesModal(
             Text(
                 text = "Закрыть",
                 style = Typography.Title2,
-                color = Colors.BLUE
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -429,7 +430,7 @@ fun DialogConfirmDeleteRecipe(
                 Text(
                     text = "Отмена",
                     style = Typography.Title2,
-                    color = Colors.BLUE
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
             Spacer(modifier = Modifier.width(10.dp))

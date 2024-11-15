@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +26,7 @@ data object MainScreen : Screen {
     @Composable
     override fun Content() {
         val systemUiController = rememberSystemUiController()
-        systemUiController.setStatusBarColor(Colors.BLUE)
+        systemUiController.setStatusBarColor(MaterialTheme.colorScheme.primary)
         systemUiController.setNavigationBarColor(Colors.WHITE, true)
 
         val viewModel = koinScreenModel<MainScreenNavigator>()

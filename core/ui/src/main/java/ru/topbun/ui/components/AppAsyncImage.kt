@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,7 +45,7 @@ fun AppAsyncImage(
         )
         when(imageState){
             is AsyncImagePainter.State.Error -> { ImagePlaceholder(Modifier.size(placeholderSize)) }
-            is AsyncImagePainter.State.Loading -> CircularProgressIndicator(color = Colors.BLUE)
+            is AsyncImagePainter.State.Loading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             else -> {}
         }
     }
