@@ -2,8 +2,8 @@
 minSdk = "24"
 compileSdk = "34"
 targetSdk = "34"
-versionCode = "1"
-versionName = "1.0"
+versionCode = "2"
+versionName = "1.1"
 
 accompanistSystemuicontroller = "0.36.0"
 agp = "8.5.0"
