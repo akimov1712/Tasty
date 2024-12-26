@@ -49,10 +49,12 @@ import ru.topbun.navigation.main.MainScreenNavigator
 import ru.topbun.navigation.main.MainScreenProvider
 import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
+import ru.topbun.ui.components.AdaptiveInlineBanner
 import ru.topbun.ui.components.AnimateTitle
 import ru.topbun.ui.components.CategoryItem
 import ru.topbun.ui.components.ErrorComponent
 import ru.topbun.ui.components.ImagePlaceholder
+import ru.topbun.ui.components.RecipeItem
 import ru.topbun.ui.components.SearchTextField
 
 data object CategoryScreen: Screen {
@@ -119,8 +121,15 @@ private fun ColumnScope.CategoryList(viewModel: CategoryViewModel, onClickCatego
             verticalArrangement = Arrangement.spacedBy(15.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            items(state.categories) {
-                CategoryItem(it, onClickCategory)
+            state.categories.forEachIndexed { index, category ->
+                if (index != 0 && index % 20 == 0){
+                    item(span = { GridItemSpan(2) }) {
+                        AdaptiveInlineBanner(maxHeightBanner = 180)
+                    }
+                }
+                item {
+                    CategoryItem(category, onClickCategory)
+                }
             }
             item(span = { GridItemSpan(2) }) {
                 PaginationLoader(viewModel = viewModel, state = state)

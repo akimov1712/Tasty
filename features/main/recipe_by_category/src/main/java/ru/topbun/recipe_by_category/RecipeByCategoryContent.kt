@@ -53,6 +53,8 @@ import ru.topbun.recipe_by_category.RecipeByCategoryState.RecipeScreenState.*
 import ru.topbun.ui.Colors
 import ru.topbun.ui.R
 import ru.topbun.ui.Typography
+import ru.topbun.ui.components.AdaptiveInlineBanner
+import ru.topbun.ui.components.CategoryItem
 import ru.topbun.ui.components.ErrorComponent
 import ru.topbun.ui.components.RecipeItem
 
@@ -115,8 +117,15 @@ private fun ColumnScope.RecipeList(viewModel: RecipeByCategoryViewModel, onClick
             verticalArrangement = Arrangement.spacedBy(15.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(state.recipes){
-                RecipeItem(it, {viewModel.changeFavorite(it.id, !it.isFavorite)}, onClickRecipe)
+            state.recipes.forEachIndexed { index, recipe ->
+                if (index != 0 && index % 20 == 0){
+                    item(span = { GridItemSpan(2) }) {
+                        AdaptiveInlineBanner(maxHeightBanner = 100)
+                    }
+                }
+                item {
+                    RecipeItem(recipe, {viewModel.changeFavorite(recipe.id, !recipe.isFavorite)}, onClickRecipe)
+                }
             }
             item(span = { GridItemSpan(2) }) {
                 PaginationLoader(viewModel = viewModel, state = state)

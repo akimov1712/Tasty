@@ -13,6 +13,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        val bannerId = property("ad_banner_id")?.toString() ?: error("Not found banner id in properties")
+        buildConfigField("String", "BANNER_ID", "\"$bannerId\"")
     }
 
     buildTypes {
@@ -33,10 +36,13 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+
+    implementation(libs.mobileads)
 
     implementation(project(":domain"))
     implementation(project(":core:common"))

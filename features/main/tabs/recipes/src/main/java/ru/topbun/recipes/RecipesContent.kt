@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,8 +32,8 @@ import ru.topbun.domain.entity.recipe.RecipeTabs
 import ru.topbun.navigation.main.MainScreenNavigator
 import ru.topbun.navigation.main.MainScreenProvider
 import ru.topbun.recipes.RecipeState.RecipeScreenState
-import ru.topbun.ui.Colors
 import ru.topbun.ui.Typography
+import ru.topbun.ui.components.AdaptiveInlineBanner
 import ru.topbun.ui.components.AnimateTitle
 import ru.topbun.ui.components.ErrorComponent
 import ru.topbun.ui.components.RecipeItem
@@ -113,14 +112,21 @@ private fun ColumnScope.RecipeList(viewModel: RecipeViewModel, onClickRecipe: (R
             verticalArrangement = Arrangement.spacedBy(15.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(state.recipes){
-                RecipeItem(
-                    recipe = it,
-                    onClickFavorite = {
-                        viewModel.changeFavorite(it.id, !it.isFavorite)
-                    },
-                    onClickRecipe = onClickRecipe
-                )
+            state.recipes.forEachIndexed { index, recipe ->
+                if (index != 0 && index % 20 == 0){
+                    item(span = { GridItemSpan(2) }) {
+                        AdaptiveInlineBanner()
+                    }
+                }
+                item {
+                    RecipeItem(
+                        recipe = recipe,
+                        onClickFavorite = {
+                            viewModel.changeFavorite(recipe.id, !recipe.isFavorite)
+                        },
+                        onClickRecipe = onClickRecipe
+                    )
+                }
             }
             item(span = { GridItemSpan(2) }) {
                 PaginationLoader(viewModel = viewModel, state = state)
@@ -157,3 +163,4 @@ private fun PaginationLoader(viewModel: RecipeViewModel, state: RecipeState) {
         }
     }
 }
+
